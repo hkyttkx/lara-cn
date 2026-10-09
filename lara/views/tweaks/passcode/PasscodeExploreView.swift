@@ -64,18 +64,18 @@ struct PasscodeExploreView: View {
         .sheet(isPresented: $showRepoMgr) {
             PasscodeRepoView()
         }
-        .navigationTitle("Explore Passcode Themes")
+        .navigationTitle("浏览密码主题")
         .navigationBarTitleDisplayMode(.inline)
-        .searchable(text: $searchTerm, prompt: "Search themes or authors")
+        .searchable(text: $searchTerm, prompt: "搜索主题或作者")
         .refreshable { await gallery.loadThemes(forceRefresh: true) }
         .task { if gallery.themes.isEmpty { await gallery.loadThemes() } }
-        .alert("Passcode Themes", isPresented: Binding(get: { alertMessage != nil }, set: { if !$0 { alertMessage = nil } })) { Button("OK", role: .cancel) {} } message: { Text(alertMessage ?? "") }
+        .alert("锁屏密码主题", isPresented: Binding(get: { alertMessage != nil }, set: { if !$0 { alertMessage = nil } })) { Button("确定", role: .cancel) {} } message: { Text(alertMessage ?? "") }
     }
 
     private var loadingView: some View {
         VStack(spacing: 12) {
             ProgressView().controlSize(.large)
-            Text("Loading themes…")
+            Text("正在加载主题…")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
@@ -85,12 +85,12 @@ struct PasscodeExploreView: View {
 
     private func errorView(_ message: String) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Could not load themes.")
+            Text("无法加载主题。")
                 .font(.headline)
             Text(message)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-            Button("Retry") { Task { await gallery.loadThemes(forceRefresh: true) } }
+            Button("重试") { Task { await gallery.loadThemes(forceRefresh: true) } }
             .buttonStyle(.borderedProminent)
         }
         .padding()
@@ -148,7 +148,7 @@ private struct PasscodeGalleryCard: View {
                 Button(action: onDownload) {
                     HStack {
                         if isDownloading { ProgressView().controlSize(.small).tint(.white) } else { Image(systemName: "arrow.down.circle") }
-                        Text("Import Theme")
+                        Text("导入主题")
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)

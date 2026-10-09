@@ -40,7 +40,7 @@ struct VarCleanView: View {
 
     var body: some View {
         List {
-            Section("Status") {
+            Section("状态") {
                 Text(cleanupok
                      ? "Cleanup enabled via sandbox escape."
                      : "Detection only. Escape the sandbox to delete matched paths.")
@@ -54,8 +54,8 @@ struct VarCleanView: View {
             }
 
             if groups.isEmpty && !isrefreshing {
-                Section("Matches") {
-                    Text("No blacklisted residue from VarCleanRules.json was found.")
+                Section("匹配项") {
+                    Text("未发现 VarCleanRules.json 中的黑名单残留")
                         .foregroundColor(.secondary)
                 }
             } else {
@@ -91,7 +91,7 @@ struct VarCleanView: View {
                 }
             }
         }
-        .navigationTitle("VarClean")
+        .navigationTitle("变量清理")
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
@@ -105,12 +105,12 @@ struct VarCleanView: View {
                 }
                 .disabled(isrefreshing || isdeleting)
 
-                Button(selectedcount == 0 ? "Select All" : "Clear") {
+                Button(selectedcount == 0 ? "Select All" : "清除") {
                     toggleselection()
                 }
                 .disabled(!cleanupok || groups.isEmpty || isdeleting)
 
-                Button("Clean") {
+                Button("清理") {
                     showdeleteconfirm = true
                 }
                 .disabled(!cleanupok || selectedcount == 0 || isdeleting)
@@ -119,13 +119,13 @@ struct VarCleanView: View {
         .task {
             await refresh()
         }
-        .alert("Delete Selected Items?", isPresented: $showdeleteconfirm) {
-            Button("Cancel", role: .cancel) {}
-            Button("Delete", role: .destructive) {
+        .alert("删除选中项？", isPresented: $showdeleteconfirm) {
+            Button("取消", role: .cancel) {}
+            Button("删除", role: .destructive) {
                 Task { await deleteselected() }
             }
         } message: {
-            Text("Delete \(selectedcount) matched path\(selectedcount == 1 ? "" : "s")?")
+            Text("删除 \(selectedcount) matched path\(selectedcount == 1 ? "" : "s")?")
         }
     }
 

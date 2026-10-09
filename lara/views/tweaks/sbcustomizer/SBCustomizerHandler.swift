@@ -365,7 +365,7 @@ class ColorSwapManager {
                 throw "File size does not match!!!\nNew: \(newData.count)\nOld: \(plistData.count)"
             }
         } else {
-            throw "Error serializing original plist data!"
+            throw "错误 serializing original plist data!"
         }
     }
     

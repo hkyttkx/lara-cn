@@ -32,7 +32,7 @@ struct ContentView: View {
                 DebugSection
                 InlineLogsSection
             }
-            .navigationTitle("lara")
+            .navigationTitle("Lara")
             .toolbar {
                 if selectedlogsdisplaymode == .toolbar {
                     Button(action: {
@@ -56,7 +56,7 @@ struct ContentView: View {
     private var AlertsSection: some View {
         Section {
             if !mgr.hasOffsets {
-                PlainAlert(title: "No offsets found!", icon: "exclamationmark.triangle.fill", text: "Kernelcache offsets are missing. Click \"Run Exploit\" and then fetch the offsets.")
+                PlainAlert(title: "未找到偏移！", icon: "exclamationmark.triangle.fill", text: "Kernelcache offsets are missing. Click \"Run Exploit\" and then fetch the offsets.")
             }
         }
     }
@@ -75,7 +75,7 @@ struct ContentView: View {
                     Image(systemName: "xmark.circle")
                 }
             }) {
-                Button("Run Exploit", action: {
+                Button("运行漏洞利用", action: {
                     offsets_init()
                     mgr.run()
                 })
@@ -107,12 +107,12 @@ struct ContentView: View {
                 } label: {
                     if dlingkcache {
                         HStack {
-                            Text("Fetching Kernelcache...")
+                            Text("正在获取内核缓存…")
                             Spacer()
                             ProgressView()
                         }
                     } else {
-                        Text("Fetch Kernelcache")
+                        Text("获取内核缓存")
                     }
                 }
                 .disabled(dlingkcache || !mgr.dsready)
@@ -123,14 +123,14 @@ struct ContentView: View {
                             Image(systemName: "checkmark.circle")
                         } else if mgr.vfsrunning || mgr.sbxrunning {
                             HStack {
-                                Text("Running...")
+                                Text("运行中…")
                                 ProgressView()
                             }
                         } else if (mgr.vfsattempted && mgr.vfsfailed) || (mgr.sbxattempted && mgr.sbxfailed) {
                             Image(systemName: "xmark.circle")
                         }
                     }) {
-                        Button("Initialize System", action: {
+                        Button("初始化系统", action: {
                             mgr.vfsinit()
                             mgr.sbxescape()
                         })
@@ -152,7 +152,7 @@ struct ContentView: View {
                             Image(systemName: "xmark.circle")
                         }
                     }) {
-                        Button("Initialize VFS", action: {
+                        Button("初始化虚拟文件系统", action: {
                             mgr.vfsinit()
                         })
                         .disabled(!mgr.dsready || mgr.vfsready || mgr.vfsrunning || isdebugged())
@@ -166,14 +166,14 @@ struct ContentView: View {
                             Image(systemName: "checkmark.circle")
                         } else if mgr.sbxrunning {
                             HStack {
-                                Text("Running...")
+                                Text("运行中…")
                                 ProgressView()
                             }
                         } else if mgr.sbxattempted && mgr.sbxfailed {
                             Image(systemName: "xmark.circle")
                         }
                     }) {
-                        Button("Escape Sandbox", action: {
+                        Button("逃逸沙盒", action: {
                             mgr.sbxescape()
                         })
                         .disabled(!mgr.dsready || mgr.sbxready || mgr.sbxrunning || isdebugged())
@@ -184,7 +184,7 @@ struct ContentView: View {
             HeaderLabel(text: "Kernel Read Write", icon: "externaldrive")
         } footer: {
             if isdebugged() {
-                Text("Not available while a debugger is attached.")
+                Text("调试器附加期间不可用")
             }
         }
     }
@@ -199,14 +199,14 @@ struct ContentView: View {
                         Image(systemName: "checkmark.circle")
                     } else if mgr.rcrunning {
                         HStack {
-                            Text("Running...")
+                            Text("运行中…")
                             ProgressView()
                         }
                     } else if mgr.rcfailed {
                         Image(systemName: "xmark.circle")
                     }
                 }) {
-                    Button("Initalize RemoteCall", action: {
+                    Button("初始化远程调用", action: {
                         mgr.rcinit(process: "SpringBoard", migbypass: false) { success in
                             if success {
                                 mgr.logmsg("rc init succeeded!")
@@ -223,7 +223,7 @@ struct ContentView: View {
                 
                 // destroy remotecall
                 if mgr.rcready {
-                    Button("Destroy Remotecall", action: {
+                    Button("销毁远程调用", action: {
                         mgr.rcdestroy()
                     })
                 }
@@ -232,16 +232,16 @@ struct ContentView: View {
             } footer: {
                 VStack(alignment: .leading, spacing: 4) {
                     if let error = mgr.rcLastError ?? mgr.sbProc?.lastError {
-                        Text("Error: \(error)")
+                        Text("错误：\(error)")
                             .foregroundColor(.red)
                     }
                     if RemoteCall.isLiveContainerRuntime() && !RemoteCall.isLiveProcessRuntime() {
                         Text("RemoteCall needs a PAC-enabled LiveContainer launch context. The main exploit may still work when RemoteCall is unavailable.")
                     }
                     if isdebugged() {
-                        Text("Not available when a debugger is attached.")
+                        Text("附加调试器时不可用")
                     }
-                    Text("RemoteCall is relatively unstable and may not work properly.")
+                    Text("远程调用不太稳定，可能无法正常工作。")
                     if isIOS16() {
                         Text("iOS 16 tip: Open Control Center after tapping Initialize RemoteCall. This significantly improves the success rate and speed.")
                             .fontWeight(.semibold)
@@ -258,17 +258,17 @@ struct ContentView: View {
     }
     
     private var ActionsSection: some View {
-        Section(header: HeaderLabel(text: "Actions", icon: "wrench.and.screwdriver")) {
-            Button("Respring", action: {
+        Section(header: HeaderLabel(text: "操作", icon: "wrench.and.screwdriver")) {
+            Button("注销（Respring）", action: {
                 mgr.respring()
             })
             
-            Button("Panic!", action: {
+            Button("崩溃！", action: {
                 mgr.panic()
             })
             
             if isdebugged() {
-                Button("Detach Debugger", action: {
+                Button("分离调试器", action: {
                     exit(0)
                 })
             }
@@ -326,17 +326,17 @@ struct ContentView: View {
                 }
                 .frame(height: 250)
                 
-                Button("Copy All") {
+                Button("全部复制") {
                     UIPasteboard.general.string = logger.logs.joined(separator: "\n\n")
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                 }
                 
-                Button("Clear") {
+                Button("清除") {
                     logger.clear()
                 }
                 .foregroundColor(.red)
             } header: {
-                HeaderLabel(text: "Logs", icon: "terminal")
+                HeaderLabel(text: "日志", icon: "terminal")
             }
         }
     }

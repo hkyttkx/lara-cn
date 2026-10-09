@@ -22,8 +22,8 @@ struct DarkBoardExploreView: View {
             }
             .padding()
         }
-        .navigationTitle("Explore")
-        .searchable(text: $searchTerm, prompt: "Search themes or authors")
+        .navigationTitle("浏览")
+        .searchable(text: $searchTerm, prompt: "搜索主题或作者")
         .refreshable {
             await gallery.loadThemes(forceRefresh: true)
             updateDisplayedThemes()
@@ -38,7 +38,7 @@ struct DarkBoardExploreView: View {
         .onChange(of: filter)         { _ in updateDisplayedThemes() }
         .onChange(of: gallery.themes) { _ in updateDisplayedThemes() }
         .alert(item: $alert) { a in
-            Alert(title: Text("Theme Gallery"), message: Text(a.message), dismissButton: .default(Text("OK")))
+            Alert(title: Text("主题库"), message: Text(a.message), dismissButton: .default(Text("确定")))
         }
     }
 
@@ -79,12 +79,12 @@ struct DarkBoardExploreView: View {
     private var content: some View {
         if let loadError = gallery.loadError, gallery.themes.isEmpty {
             VStack(alignment: .leading, spacing: 12) {
-                Text("Could not load the Cowabunga gallery.")
+                Text("无法加载 Cowabunga 图库。")
                     .font(.headline)
                 Text(loadError)
                     .font(.footnote)
                     .foregroundStyle(.secondary)
-                Button("Retry") {
+                Button("重试") {
                     Task {
                         await gallery.loadThemes(forceRefresh: true)
                         updateDisplayedThemes()
@@ -100,14 +100,14 @@ struct DarkBoardExploreView: View {
             VStack(spacing: 12) {
                 ProgressView()
                     .controlSize(.large)
-                Text("Loading themes...")
+                Text("正在加载主题…")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity)
             .padding(.top, 80)
         } else if displayedThemes.isEmpty {
-            Text("No themes matched your search.")
+            Text("没有匹配的主题")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity)
@@ -119,7 +119,7 @@ struct DarkBoardExploreView: View {
                         Task {
                             do {
                                 try await gallery.downloadAndImport(theme)
-                                alert = DarkBoardExploreAlert(message: "Imported \(theme.name).")
+                                alert = DarkBoardExploreAlert(message: "已导入 \(theme.name).")
                             } catch {
                                 alert = DarkBoardExploreAlert(message: error.localizedDescription)
                             }
@@ -171,7 +171,7 @@ private struct GalleryThemeCard: View {
                     }
                     Spacer()
                     if isImported {
-                        Text("Imported")
+                        Text("已导入")
                             .font(.caption.bold())
                             .foregroundStyle(.green)
                     }
@@ -192,7 +192,7 @@ private struct GalleryThemeCard: View {
                                   : "arrow.down.circle")
                         }
 
-                        Text(isImported ? "Reimport Theme" : "Import Theme")
+                        Text(isImported ? "Reimport Theme" : "导入主题")
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)

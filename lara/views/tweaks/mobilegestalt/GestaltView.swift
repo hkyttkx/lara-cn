@@ -53,23 +53,23 @@ struct GestaltView: View {
                     Button {
                         applyGestalt()
                     } label: {
-                        Text("Apply Tweaks")
+                        Text("应用调整")
                     }
                     
                     Button {
                         resetnugget()
                         restoreGestalt()
                     } label: {
-                        Text("Reset Tweaks")
+                        Text("重置调整")
                     }
                 }
                 
                 // artwork tweaks will be added when applying mobilegestalt because there's no "toggleable" bindings.
                 Section(header: HeaderLabel(text: "Device Artwork", icon: "paintbrush.pointed")) {
                     Picker(selection: $mgSubtype) {
-                        Text("Original (\(mgOriginalSubtype))").tag(mgOriginalSubtype)
+                        Text("原始（\(mgOriginalSubtype))").tag(mgOriginalSubtype)
                         if isDeviceNotBroke() {
-                            Text("Disable Dynamic Island").tag(2436)
+                            Text("禁用灵动岛").tag(2436)
                         }
                         Text("iPhone 14 Pro").tag(2436)
                         Text("iPhone 14 Pro Max").tag(2796)
@@ -82,13 +82,13 @@ struct GestaltView: View {
                             Text("iPhone Air").tag(2736)
                         }
                         if UIDevice._hasHomeButton() {
-                            Text("iPhone X Gestures").tag(2436)
+                            Text("iPhone X 手势").tag(2436)
                         }
                     } label: {
                         HStack(spacing: 12) {
                             Image(systemName: "iphone")
                                 .frame(width: 20, alignment: .center)
-                            Text("Subtype")
+                            Text("子类型")
                             Spacer()
                         }
                     }
@@ -127,14 +127,14 @@ struct GestaltView: View {
                     PlainToggle(text: "Apple Intelligence", icon: "apple.intelligence", minSupportedVersion: 18.1, isOn: mgKeyBinding(["A62OafQ85EJAiiqKn4agtg"]))
                     HStack(spacing: 10) {
                         Picker("Spoofing", selection: $mgProductType) {
-                            Text("Default").tag(machineName())
+                            Text("默认").tag(machineName())
                             if UIDevice.current.userInterfaceIdiom == .pad {
                                 if doubleSystemVersion() >= 17.4 {
-                                    Text("iPad Pro 11-inch (M4)").tag("iPad16,3")
-                                    Text("iPad Pro 11-inch (M4, Cellular)").tag("iPad16,4")
+                                    Text("iPad Pro 11 英寸（M4）").tag("iPad16,3")
+                                    Text("iPad Pro 11 英寸（M4，蜂窝版）").tag("iPad16,4")
                                 }
-                                Text("iPad Pro 11-inch (4th Gen)").tag("iPad14,3")
-                                Text("iPad Pro 11-inch (4th Gen, Cellular)").tag("iPad14,4")
+                                Text("iPad Pro 11 英寸（第 4 代）").tag("iPad14,3")
+                                Text("iPad Pro 11 英寸（第 4 代，蜂窝版）").tag("iPad14,4")
                             } else {
                                 Text("iPhone 15 Pro").tag("iPhone16,1")
                                 Text("iPhone 15 Pro Max").tag("iPhone16,2")
@@ -154,7 +154,7 @@ struct GestaltView: View {
                         }
                         
                         Button(action: {
-                            Alertinator.shared.alert(title: "Device Spoofing Info", body: "Only spoof your device model if you want to download Apple Intelligence. This may break Face ID. If you decide to unspoof and want to keep Apple Intelligence, do NOT re-enter the Apple Intelligence & Siri menu in Settings.")
+                            Alertinator.shared.alert(title: "设备伪装信息", body: "Only spoof your device model if you want to download Apple Intelligence. This may break Face ID. If you decide to unspoof and want to keep Apple Intelligence, do NOT re-enter the Apple Intelligence & Siri menu in Settings.")
                         }) {
                             Image(systemName: "info.circle")
                                 .frame(width: 24, height: 22)
@@ -328,7 +328,7 @@ struct GestaltView: View {
                     HeaderLabel(text: "Debug", icon: "ladybug")
                 }
             }
-            .navigationTitle("MobileGestalt")
+            .navigationTitle("设备信息（Gestalt）")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
@@ -349,8 +349,8 @@ struct GestaltView: View {
             .sheet(isPresented: $mgShowFileSheet) {
                 GestaltFileView()
             }
-            .alert("Warning", isPresented: $showgestaltwarn) {
-                Button("Alright.", role: .cancel) {
+            .alert("警告", isPresented: $showgestaltwarn) {
+                Button("好", role: .cancel) {
                     showgestaltwarn = false
                     gestaltwarn = false
                 }
@@ -366,13 +366,13 @@ struct GestaltView: View {
             print(mgCurrentDict.description)
             prepareGestaltData()
         } catch {
-            Alertinator.shared.alert(title: "Failed to load current MobileGestalt!", body: "\(error)")
+            Alertinator.shared.alert(title: "加载当前设备信息失败！", body: "\(error)")
         }
     }
     
     private func prepareGestaltData() {
         let docsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let mgSavedURL = docsDir.appendingPathComponent("SavedGestalt.plist")
+        let mgSavedURL = docsDir.appendingPathComponent("已保存Gestalt.plist")
         let mgCurrentURL = URL(fileURLWithPath: mgCurrentPath)
         
         do {
@@ -408,7 +408,7 @@ struct GestaltView: View {
                 mgDeviceName = deviceName
             }
         } catch {
-            Alertinator.shared.alert(title: "Failed to load data from MobileGestalt!", body: "Please restart the app and try again.\n\nError: \(error)")
+            Alertinator.shared.alert(title: "从设备信息读取数据失败！", body: "Please restart the app and try again.\n\nError: \(error)")
         }
     }
     
@@ -439,19 +439,19 @@ struct GestaltView: View {
             let result = mgr.lara_overwritefile(target: mgCurrentPath, data: mgData, fallback_vfs: false)
             
             if result.ok {
-                Alertinator.shared.alert(title: "Successfully applied MobileGestalt!", body: "Respring to see any changes", actionLabel: "Respring", action: { mgr.respring() })
+                Alertinator.shared.alert(title: "设备信息已应用！", body: "Respring to see any changes", actionLabel: "注销（Respring）", action: { mgr.respring() })
             } else {
                 throw "Overwrite failed: \(result.message)"
             }
         } catch {
-            Alertinator.shared.alert(title: "Failed to overwrite MobileGestalt!", body: "\(error)")
+            Alertinator.shared.alert(title: "覆盖设备信息失败！", body: "\(error)")
         }
     }
     
     private func restoreGestalt() {
         do {
             let docsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let mgSavedURL = docsDir.appendingPathComponent("SavedGestalt.plist")
+            let mgSavedURL = docsDir.appendingPathComponent("已保存Gestalt.plist")
             
             if FileManager.default.fileExists(atPath: mgSavedURL.path) {
                 let restored = try loadMutablePlistDictionary(from: mgSavedURL)
@@ -461,7 +461,7 @@ struct GestaltView: View {
                 throw "No MobileGestalt file found!"
             }
         } catch {
-            Alertinator.shared.alert(title: "Failed to restore MobileGestalt!", body: "\(error)")
+            Alertinator.shared.alert(title: "还原设备信息失败！", body: "\(error)")
         }
     }
     
@@ -535,7 +535,7 @@ struct GestaltView: View {
             return false
         }, set: { enabled in
             if enabled {
-                Alertinator.shared.alert(title: "Warning!", body: "This is a very dangerous tweak to use! If you use an alphanumeric passcode, DO NOT USE THIS TWEAK AT ALL! Please do not turn off \"Show Dock In Stage Manager\" or your device will BOOTLOOP when rotating to landscape! With these two things in mind, you may experience general instability, or other major issues such as app data randomly disappearing. But I guess some funny multitasking features that still make the device relatively unusable are cool? Whatever dude, I'm not here to tell you how to use your own device.")
+                Alertinator.shared.alert(title: "警告！", body: "This is a very dangerous tweak to use! If you use an alphanumeric passcode, DO NOT USE THIS TWEAK AT ALL! Please do not turn off \"Show Dock In Stage Manager\" or your device will BOOTLOOP when rotating to landscape! With these two things in mind, you may experience general instability, or other major issues such as app data randomly disappearing. But I guess some funny multitasking features that still make the device relatively unusable are cool? Whatever dude, I'm not here to tell you how to use your own device.")
             }
             cacheData.mutableBytes.storeBytes(of: enabled ? 3 : 1, toByteOffset: valueOffset, as: Int.self)
             for key in keys {
@@ -560,7 +560,7 @@ struct GestaltView: View {
             },
             set: { enabled in
                 if enabled {
-                    Alertinator.shared.alert(title: "Warning!", body: "Please do not use this feature to bypass region restrictions that would equate to breaking regional laws (e.g. disabling the camera shutter sound). We will NOT be held responsible for enabling any illegal activites!")
+                    Alertinator.shared.alert(title: "警告！", body: "Please do not use this feature to bypass region restrictions that would equate to breaking regional laws (e.g. disabling the camera shutter sound). We will NOT be held responsible for enabling any illegal activites!")
                     cacheExtra["h63QSdBCiT/z0WU6rdQv6Q"] = "US"
                     cacheExtra["zHeENZu+wbg7PUprwNwBWg"] = "LL/A"
                 } else {
@@ -661,7 +661,7 @@ struct GestaltView: View {
 
                 if !result.ok {
                     Alertinator.shared.alert(
-                        title: "Failed to Apply Tweak",
+                        title: "应用调整失败",
                         body: result.message
                     )
                 }
@@ -744,7 +744,7 @@ func verifyPlist(_ plist: Any, targetPath: String) throws -> Data {
         if let current = attrs[.size] as? NSNumber,
            current.intValue == 0 {
             Alertinator.shared.alert(
-                title: "Dangerous Plist State Detected",
+                title: "检测到危险的 Plist 状态",
                 body: "The current plist file is already 0 bytes. Overwriting has been aborted to prevent corruption."
             )
             throw "Current MobileGestalt file is 0 bytes."
@@ -753,7 +753,7 @@ func verifyPlist(_ plist: Any, targetPath: String) throws -> Data {
     
     guard PropertyListSerialization.propertyList(plist, isValidFor: .binary) else {
         Alertinator.shared.alert(
-            title: "Invalid Property List",
+            title: "无效的属性列表",
             body: "The plist is invalid and cannot be written safely."
         )
         throw "Invalid plist structure."
@@ -767,7 +767,7 @@ func verifyPlist(_ plist: Any, targetPath: String) throws -> Data {
     
     if data.isEmpty || data.count == 0 {
         Alertinator.shared.alert(
-            title: "Refusing Empty Plist Write",
+            title: "拒绝写入空 Plist",
             body: "The generated plist would become 0 bytes after overwrite. Operation cancelled."
         )
         throw "Serialized plist data is empty."
@@ -781,7 +781,7 @@ func verifyPlist(_ plist: Any, targetPath: String) throws -> Data {
         )
     } catch {
         Alertinator.shared.alert(
-            title: "Invalid Serialized Property List",
+            title: "无效的序列化属性列表",
             body: "The generated plist failed validation after serialization."
         )
         throw "Serialized plist validation failed."

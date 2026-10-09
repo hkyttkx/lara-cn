@@ -16,16 +16,16 @@ struct ScreenTimeView: View {
 
     var body: some View {
         List {
-            Section(header: HeaderLabel(text: "Status", icon: "hourglass")) {
+            Section(header: HeaderLabel(text: "状态", icon: "hourglass")) {
                 HStack {
-                    Text("Screen Time")
+                    Text("屏幕使用时间")
                     Spacer()
                     Text(screenTimeDisabled ? "Disabled" : "Enabled")
                         .foregroundColor(screenTimeDisabled ? .red : .green)
                         .monospaced()
                 }
                 HStack {
-                    Text("Preferences backup")
+                    Text("偏好备份")
                     Spacer()
                     Text(backupExists ? "Found" : "Not found")
                         .foregroundColor(backupExists ? .green : .secondary)
@@ -48,7 +48,7 @@ struct ScreenTimeView: View {
             }
 
             Section(
-                header: HeaderLabel(text: "Actions", icon: "wrench.and.screwdriver"),
+                header: HeaderLabel(text: "操作", icon: "wrench.and.screwdriver"),
                 footer: Text("Kills selected daemons, removes Screen Time preferences, and marks them as disabled in launchd's disabled.plist. A reboot is required for changes to take effect.")
             ) {
                 Button {
@@ -56,12 +56,12 @@ struct ScreenTimeView: View {
                 } label: {
                     if isWorking && !screenTimeDisabled {
                         HStack {
-                            Text("Disabling…")
+                            Text("正在禁用…")
                             Spacer()
                             ProgressView()
                         }
                     } else {
-                        Text("Disable Screen Time")
+                        Text("禁用屏幕使用时间")
                     }
                 }
                 .disabled(isWorking || screenTimeDisabled)
@@ -71,25 +71,25 @@ struct ScreenTimeView: View {
                 } label: {
                     if isWorking && screenTimeDisabled {
                         HStack {
-                            Text("Enabling…")
+                            Text("正在启用…")
                             Spacer()
                             ProgressView()
                         }
                     } else {
-                        Text("Enable Screen Time")
+                        Text("启用屏幕使用时间")
                     }
                 }
                 .disabled(isWorking || !screenTimeDisabled)
             }
         }
-        .navigationTitle("Screen Time")
+        .navigationTitle("屏幕使用时间")
         .onAppear {
             if !screenTimeDisabled {
                 syncStateFromPlist()
             }
         }
-        .alert("Result", isPresented: .constant(lastResult != nil)) {
-            Button("OK") { lastResult = nil }
+        .alert("结果", isPresented: .constant(lastResult != nil)) {
+            Button("确定") { lastResult = nil }
         } message: {
             Text(lastResult ?? "")
         }

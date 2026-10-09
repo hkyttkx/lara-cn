@@ -157,51 +157,51 @@ struct santanderdirview: View {
                             Button {
                                 copy(entry)
                             } label: {
-                                Label("Copy", systemImage: "doc.on.doc")
+                                Label("复制", systemImage: "doc.on.doc")
                             }
 
                             Button {
                                 infoitem = entry
                             } label: {
-                                Label("Get Info", systemImage: "info.circle")
+                                Label("查看信息", systemImage: "info.circle")
                             }
 
                             Button {
                                 share(entry)
                             } label: {
-                                Label("Share", systemImage: "square.and.arrow.up")
+                                Label("分享", systemImage: "square.and.arrow.up")
                             }
 
                             Button {
                                 renameitem = entry
                             } label: {
-                                Label("Rename", systemImage: "pencil")
+                                Label("重命名", systemImage: "pencil")
                             }
                             .disabled(!readsbx)
 
                             Button {
                                 replace(entry)
                             } label: {
-                                Label("Replace With Clipboard", systemImage: "doc.on.clipboard")
+                                Label("用剪贴板替换", systemImage: "doc.on.clipboard")
                             }
                             .disabled(clip.item == nil || (!readsbx && !writevfs))
 
                             Button {
                                 chmoditem = entry
                             } label: {
-                                Label("Chmod", systemImage: "lock.open")
+                                Label("修改权限", systemImage: "lock.open")
                             }
 
                             Button {
                                 chownitem = entry
                             } label: {
-                                Label("Chown", systemImage: "person.crop.circle")
+                                Label("修改属主", systemImage: "person.crop.circle")
                             }
 
                             Button(role: .destructive) {
                                 delitem = entry
                             } label: {
-                                Label("Delete", systemImage: "trash")
+                                Label("删除", systemImage: "trash")
                             }
                         }
                     }
@@ -245,57 +245,57 @@ struct santanderdirview: View {
                         if readsbx {
                             showimport = true
                         } else {
-                            msg = santandermsg(title: "Upload Unavailable", text: "Upload is only supported in SBX mode.")
+                            msg = santandermsg(title: "上传不可用", text: "Upload is only supported in SBX mode.")
                         }
                     } label: {
-                        Label("Upload File", systemImage: "square.and.arrow.down")
+                        Label("上传文件", systemImage: "square.and.arrow.down")
                     }
 
                     Button {
                         if readsbx {
                             shownewfolder = true
                         } else {
-                            msg = santandermsg(title: "New Folder Unavailable", text: "Creating folders is only supported in SBX mode.")
+                            msg = santandermsg(title: "新建文件夹不可用", text: "Creating folders is only supported in SBX mode.")
                         }
                     } label: {
-                        Label("New Folder", systemImage: "folder.badge.plus")
+                        Label("新建文件夹", systemImage: "folder.badge.plus")
                     }
 
                     Button {
                         if readsbx {
                             shownewfile = true
                         } else {
-                            msg = santandermsg(title: "Create File Unavailable", text: "Creating files is only supported in SBX mode.")
+                            msg = santandermsg(title: "创建文件不可用", text: "Creating files is only supported in SBX mode.")
                         }
                     } label: {
-                        Label("Create File", systemImage: "doc.badge.plus")
+                        Label("新建文件", systemImage: "doc.badge.plus")
                     }
 
                     Button {
                         paste(replace: false)
                     } label: {
-                        Label("Paste", systemImage: "doc.on.clipboard")
+                        Label("粘贴", systemImage: "doc.on.clipboard")
                     }
                     .disabled(clip.item == nil || !readsbx)
 
                     Button {
                         paste(replace: true)
                     } label: {
-                        Label("Paste (Replace)", systemImage: "doc.on.clipboard.fill")
+                        Label("粘贴（替换）", systemImage: "doc.on.clipboard.fill")
                     }
                     .disabled(clip.item == nil || !readsbx)
 
                     Menu {
-                        Button("Sort A-Z") {
+                        Button("按 A-Z 排序") {
                             model.sort = .az
                             model.load(query: query.trimmingCharacters(in: .whitespacesAndNewlines))
                         }
-                        Button("Sort Z-A") {
+                        Button("按 Z-A 排序") {
                             model.sort = .za
                             model.load(query: query.trimmingCharacters(in: .whitespacesAndNewlines))
                         }
                     } label: {
-                        Label("Sort", systemImage: "arrow.up.arrow.down")
+                        Label("排序", systemImage: "arrow.up.arrow.down")
                     }
 
                     Button {
@@ -308,13 +308,13 @@ struct santanderdirview: View {
                     Button {
                         nav.go(santanderitem(path: "/", isdir: true))
                     } label: {
-                        Label("Go to Root", systemImage: "externaldrive")
+                        Label("前往根目录", systemImage: "externaldrive")
                     }
 
                     Button {
                         nav.go(santanderitem(path: NSHomeDirectory(), isdir: true))
                     } label: {
-                        Label("Go to Home", systemImage: "house")
+                        Label("前往主目录", systemImage: "house")
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -327,34 +327,34 @@ struct santanderdirview: View {
                 guard let url = urls.first else { return }
                 upload(url)
             case .failure(let err):
-                msg = santandermsg(title: "Upload Failed", text: err.localizedDescription)
+                msg = santandermsg(title: "上传失败", text: err.localizedDescription)
             }
         }
         .alert(item: $msg) { msg in
-            Alert(title: Text(msg.title), message: Text(msg.text), dismissButton: .default(Text("OK")))
+            Alert(title: Text(msg.title), message: Text(msg.text), dismissButton: .default(Text("确定")))
         }
-        .alert("Delete", isPresented: Binding(get: { delitem != nil }, set: { if !$0 { delitem = nil } })) {
-            Button("Cancel", role: .cancel) {
+        .alert("删除", isPresented: Binding(get: { delitem != nil }, set: { if !$0 { delitem = nil } })) {
+            Button("取消", role: .cancel) {
                 delitem = nil
             }
-            Button("Delete", role: .destructive) {
+            Button("删除", role: .destructive) {
                 if let entry = delitem {
                     delete(entry)
                 }
                 delitem = nil
             }
         } message: {
-            Text("Delete \(delitem?.name ?? "item")?")
+            Text("删除 \(delitem?.name ?? "item")?")
         }
         .sheet(item: $infoitem) { entry in
             infosheetcontent(entry: entry)
         }
         .sheet(item: $renameitem) { entry in
             santandernamesheet(
-                title: "Rename",
+                title: "重命名",
                 itemname: entry.name,
                 placeholder: entry.name,
-                actiontitle: "Rename"
+                actiontitle: "重命名"
             ) { newname in
                 rename(entry, newname: newname)
             }
@@ -363,27 +363,27 @@ struct santanderdirview: View {
             santanderchmodsheet(item: entry) { mode in
                 santanderfs.clearImmutableIfPossible(atPath: entry.path)
                 let ok = entry.path.withCString { apfs_mod($0, mode) == 0 }
-                msg = santandermsg(title: "Chmod", text: ok ? "Operation completed." : "Operation failed.")
+                msg = santandermsg(title: "修改权限", text: ok ? "Operation completed." : "Operation failed.")
             }
         }
         .sheet(item: $chownitem) { entry in
             santanderchownsheet(item: entry) { uid, gid in
                 santanderfs.clearImmutableIfPossible(atPath: entry.path)
                 let ok = entry.path.withCString { apfs_own($0, uid, gid) == 0 }
-                msg = santandermsg(title: "Chown", text: ok ? "Operation completed." : "Operation failed.")
+                msg = santandermsg(title: "修改属主", text: ok ? "Operation completed." : "Operation failed.")
             }
         }
-        .alert("File Manager Info", isPresented: $showvfsinfo) {
-            Button("OK", role: .cancel) {}
+        .alert("文件管理器信息", isPresented: $showvfsinfo) {
+            Button("确定", role: .cancel) {}
         } message: {
             Text("This browser is powered by vfs namecache lookups, not full directory enumeration. Some folders may appear empty unless entries are already cached. Symlinks may also be shown as files even when their targets are directories.")
         }
         .sheet(isPresented: $shownewfolder) {
             santandernamesheet(
-                title: "New Folder",
+                title: "新建文件夹",
                 itemname: item.name,
-                placeholder: "New Folder",
-                actiontitle: "Create"
+                placeholder: "新建文件夹",
+                actiontitle: "创建"
             ) { name in
                 newfolder(name: name)
             }
@@ -441,29 +441,29 @@ struct santanderdirview: View {
 
     private func copy(_ entry: santanderitem) {
         clip.item = santanderclipitem(path: entry.path, isdir: entry.isdir, name: entry.name)
-        msg = santandermsg(title: "Copied", text: entry.name)
+        msg = santandermsg(title: "已复制", text: entry.name)
     }
 
     private func rename(_ entry: santanderitem, newname: String) {
         guard readsbx else {
-            msg = santandermsg(title: "Rename Unavailable", text: "Rename is only supported in SBX mode.")
+            msg = santandermsg(title: "重命名不可用", text: "Rename is only supported in SBX mode.")
             return
         }
 
         let trimmed = newname.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
-            msg = santandermsg(title: "Rename Failed", text: "Name cannot be empty.")
+            msg = santandermsg(title: "重命名失败", text: "Name cannot be empty.")
             return
         }
         guard !trimmed.contains("/") else {
-            msg = santandermsg(title: "Rename Failed", text: "Name cannot contain '/'.")
+            msg = santandermsg(title: "重命名失败", text: "Name cannot contain '/'.")
             return
         }
         guard trimmed != entry.name else { return }
 
         let dest = ((entry.path as NSString).deletingLastPathComponent as NSString).appendingPathComponent(trimmed)
         guard !FileManager.default.fileExists(atPath: dest) else {
-            msg = santandermsg(title: "Rename Failed", text: "A file with that name already exists.")
+            msg = santandermsg(title: "重命名失败", text: "A file with that name already exists.")
             return
         }
 
@@ -472,29 +472,29 @@ struct santanderdirview: View {
             try FileManager.default.moveItem(atPath: entry.path, toPath: dest)
             model.load(query: query.trimmingCharacters(in: .whitespacesAndNewlines))
         } catch {
-            msg = santandermsg(title: "Rename Failed", text: error.localizedDescription)
+            msg = santandermsg(title: "重命名失败", text: error.localizedDescription)
         }
     }
 
     private func newfolder(name: String) {
         guard readsbx else {
-            msg = santandermsg(title: "New Folder Unavailable", text: "Creating folders is only supported in SBX mode.")
+            msg = santandermsg(title: "新建文件夹不可用", text: "Creating folders is only supported in SBX mode.")
             return
         }
 
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
-            msg = santandermsg(title: "New Folder Failed", text: "Name cannot be empty.")
+            msg = santandermsg(title: "新建文件夹失败", text: "Name cannot be empty.")
             return
         }
         guard !trimmed.contains("/") else {
-            msg = santandermsg(title: "New Folder Failed", text: "Name cannot contain '/'.")
+            msg = santandermsg(title: "新建文件夹失败", text: "Name cannot contain '/'.")
             return
         }
 
         let dest = (item.path as NSString).appendingPathComponent(trimmed)
         guard !FileManager.default.fileExists(atPath: dest) else {
-            msg = santandermsg(title: "New Folder Failed", text: "A file with that name already exists.")
+            msg = santandermsg(title: "新建文件夹失败", text: "A file with that name already exists.")
             return
         }
 
@@ -502,29 +502,29 @@ struct santanderdirview: View {
             try FileManager.default.createDirectory(atPath: dest, withIntermediateDirectories: false, attributes: nil)
             model.load(query: query.trimmingCharacters(in: .whitespacesAndNewlines))
         } catch {
-            msg = santandermsg(title: "New Folder Failed", text: error.localizedDescription)
+            msg = santandermsg(title: "新建文件夹失败", text: error.localizedDescription)
         }
     }
 
     private func newfile(name: String, text: String) {
         guard readsbx else {
-            msg = santandermsg(title: "Create File Unavailable", text: "Creating files is only supported in SBX mode.")
+            msg = santandermsg(title: "创建文件不可用", text: "Creating files is only supported in SBX mode.")
             return
         }
 
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
-            msg = santandermsg(title: "Create File Failed", text: "Name cannot be empty.")
+            msg = santandermsg(title: "创建文件失败", text: "Name cannot be empty.")
             return
         }
         guard !trimmed.contains("/") else {
-            msg = santandermsg(title: "Create File Failed", text: "Name cannot contain '/'.")
+            msg = santandermsg(title: "创建文件失败", text: "Name cannot contain '/'.")
             return
         }
 
         let dest = (item.path as NSString).appendingPathComponent(trimmed)
         guard !FileManager.default.fileExists(atPath: dest) else {
-            msg = santandermsg(title: "Create File Failed", text: "A file with that name already exists.")
+            msg = santandermsg(title: "创建文件失败", text: "A file with that name already exists.")
             return
         }
 
@@ -532,19 +532,19 @@ struct santanderdirview: View {
             try Data(text.utf8).write(to: URL(fileURLWithPath: dest), options: .atomic)
             model.load(query: query.trimmingCharacters(in: .whitespacesAndNewlines))
         } catch {
-            msg = santandermsg(title: "Create File Failed", text: error.localizedDescription)
+            msg = santandermsg(title: "创建文件失败", text: error.localizedDescription)
         }
     }
 
     private func paste(replace: Bool) {
         guard readsbx else {
-            msg = santandermsg(title: "Paste Unavailable", text: "Paste is only supported in SBX mode.")
+            msg = santandermsg(title: "粘贴不可用", text: "Paste is only supported in SBX mode.")
             return
         }
         guard let clipitem = clip.item else { return }
 
         if clipitem.isdir && (item.path == clipitem.path || item.path.hasPrefix(clipitem.path + "/")) {
-            msg = santandermsg(title: "Paste Failed", text: "Cannot paste a folder into itself.")
+            msg = santandermsg(title: "粘贴失败", text: "Cannot paste a folder into itself.")
             return
         }
 
@@ -558,7 +558,7 @@ struct santanderdirview: View {
             try FileManager.default.copyItem(atPath: clipitem.path, toPath: dest)
             model.load(query: query.trimmingCharacters(in: .whitespacesAndNewlines))
         } catch {
-            msg = santandermsg(title: "Paste Failed", text: error.localizedDescription)
+            msg = santandermsg(title: "粘贴失败", text: error.localizedDescription)
         }
     }
 
@@ -570,18 +570,18 @@ struct santanderdirview: View {
             if ok {
                 model.load(query: query.trimmingCharacters(in: .whitespacesAndNewlines))
             } else {
-                msg = santandermsg(title: "Replace Failed", text: "VFS overwrite failed.")
+                msg = santandermsg(title: "替换失败", text: "VFS overwrite failed.")
             }
             return
         }
 
         guard readsbx else {
-            msg = santandermsg(title: "Replace Unavailable", text: "Replace is only supported in SBX mode.")
+            msg = santandermsg(title: "替换不可用", text: "Replace is only supported in SBX mode.")
             return
         }
 
         if clipitem.isdir && (entry.path == clipitem.path || entry.path.hasPrefix(clipitem.path + "/")) {
-            msg = santandermsg(title: "Replace Failed", text: "Cannot replace with a folder into itself.")
+            msg = santandermsg(title: "替换失败", text: "Cannot replace with a folder into itself.")
             return
         }
 
@@ -592,13 +592,13 @@ struct santanderdirview: View {
             try FileManager.default.copyItem(atPath: clipitem.path, toPath: entry.path)
             model.load(query: query.trimmingCharacters(in: .whitespacesAndNewlines))
         } catch {
-            msg = santandermsg(title: "Replace Failed", text: error.localizedDescription)
+            msg = santandermsg(title: "替换失败", text: error.localizedDescription)
         }
     }
 
     private func delete(_ entry: santanderitem) {
         guard readsbx else {
-            msg = santandermsg(title: "Delete Unavailable", text: "Delete is only supported in SBX mode.")
+            msg = santandermsg(title: "删除 Unavailable", text: "删除 is only supported in SBX mode.")
             return
         }
 
@@ -606,22 +606,22 @@ struct santanderdirview: View {
             try santanderfs.removeItemClearingImmutable(atPath: entry.path)
             model.load(query: query.trimmingCharacters(in: .whitespacesAndNewlines))
         } catch {
-            msg = santandermsg(title: "Delete Failed", text: error.localizedDescription)
+            msg = santandermsg(title: "删除 Failed", text: error.localizedDescription)
         }
     }
 
     @MainActor
     private func share(_ entry: santanderitem) {
         guard readsbx else {
-            msg = santandermsg(title: "Share Unavailable", text: "Share is only supported in SBX mode.")
+            msg = santandermsg(title: "分享不可用", text: "Share is only supported in SBX mode.")
             return
         }
         guard !entry.isdir else {
-            msg = santandermsg(title: "Share Unavailable", text: "Sharing folders is not supported.")
+            msg = santandermsg(title: "分享不可用", text: "Sharing folders is not supported.")
             return
         }
         guard FileManager.default.isReadableFile(atPath: entry.path) else {
-            msg = santandermsg(title: "Share Failed", text: "File is not readable.")
+            msg = santandermsg(title: "分享失败", text: "File is not readable.")
             return
         }
 
@@ -630,11 +630,11 @@ struct santanderdirview: View {
 
     private func upload(_ url: URL) {
         guard readsbx else {
-            msg = santandermsg(title: "Upload Unavailable", text: "Upload is only supported in SBX mode.")
+            msg = santandermsg(title: "上传不可用", text: "Upload is only supported in SBX mode.")
             return
         }
         guard url.startAccessingSecurityScopedResource() else {
-            msg = santandermsg(title: "Upload Failed", text: "Unable to access selected file.")
+            msg = santandermsg(title: "上传失败", text: "Unable to access selected file.")
             return
         }
         defer { url.stopAccessingSecurityScopedResource() }
@@ -649,7 +649,7 @@ struct santanderdirview: View {
             try FileManager.default.copyItem(at: url, to: URL(fileURLWithPath: dest))
             model.load(query: query.trimmingCharacters(in: .whitespacesAndNewlines))
         } catch {
-            msg = santandermsg(title: "Upload Failed", text: error.localizedDescription)
+            msg = santandermsg(title: "上传失败", text: error.localizedDescription)
         }
     }
 }

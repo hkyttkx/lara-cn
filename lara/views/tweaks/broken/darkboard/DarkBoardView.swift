@@ -58,7 +58,7 @@ struct DarkBoardView: View {
                 Button {
                     applyThemes()
                 } label: {
-                    Text("Apply Themes")
+                    Text("应用主题")
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(manager.selectedThemeNames.isEmpty ? Color.secondary.opacity(0.25) : Color.accentColor)
@@ -69,7 +69,7 @@ struct DarkBoardView: View {
                 .disabled(manager.selectedThemeNames.isEmpty || manager.isApplying)
             }
         }
-        .navigationTitle("DarkBoard")
+        .navigationTitle("暗色面板")
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button(role: .destructive) {
@@ -93,11 +93,11 @@ struct DarkBoardView: View {
             ThemeImportPicker(selectedURL: $pendingImportURL)
         }
         .alert(item: $alert) { alert in
-            Alert(title: Text("DarkBoard"), message: Text(alert.message), dismissButton: .default(Text("OK")))
+            Alert(title: Text("暗色面板"), message: Text(alert.message), dismissButton: .default(Text("确定")))
         }
         .overlay {
             if manager.isApplying {
-                progressOverlay(title: "Applying Icons", message: manager.applyMessage, progress: manager.applyProgress)
+                progressOverlay(title: "正在应用图标", message: manager.applyMessage, progress: manager.applyProgress)
             }
         }
         .onAppear {
@@ -126,18 +126,18 @@ struct DarkBoardView: View {
 
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Themes")
+                    Text("主题")
                         .font(.headline)
                     Text("\(manager.themes.count) imported")
                         .foregroundStyle(.secondary)
                         .font(.caption)
                 }
                 Spacer()
-                NavigationLink("Explore") {
+                NavigationLink("浏览") {
                     DarkBoardExploreView()
                 }
                 .buttonStyle(.bordered)
-                NavigationLink("Overrides") {
+                NavigationLink("覆盖项") {
                     IconOverridesView()
                 }
                 .buttonStyle(.bordered)
@@ -174,7 +174,7 @@ struct DarkBoardView: View {
 
     private func applyThemes() {
         guard mgr.sbxready else {
-            alert = DarkBoardAlert(message: "SBX is not initialized. Run the exploit, initialize SBX, then apply again.")
+            alert = DarkBoardAlert(message: "SBX 未初始化。请先运行漏洞利用并初始化 SBX，然后重新应用。")
             return
         }
 
@@ -185,7 +185,7 @@ struct DarkBoardView: View {
                     if errors.isEmpty {
                         alert = DarkBoardAlert(message: "Icons applied. Respring now. After reopening lara, initialize SBX again so the post-respring icon fixup can restore the original bundle files.")
                     } else {
-                        alert = DarkBoardAlert(message: "Applied with some errors:\n\n" + errors.joined(separator: "\n\n"))
+                        alert = DarkBoardAlert(message: "应用时出现一些错误：\n\n" + errors.joined(separator: "\n\n"))
                     }
                 }
             } catch {
@@ -267,7 +267,7 @@ private struct ThemeCardView: View {
                         }
                     }
                 } else {
-                    Text("Not enough icons for preview")
+                    Text("图标不足，无法预览")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
@@ -293,7 +293,7 @@ private struct ThemeCardView: View {
             }
 
             Button(role: .destructive, action: onDelete) {
-                Text("Remove")
+                Text("移除")
                     .font(.caption)
             }
         }
@@ -355,7 +355,7 @@ struct IconOverridesView: View {
                 }
             }
         }
-        .navigationTitle("Overrides")
+        .navigationTitle("覆盖项")
         .searchable(text: $search)
         .onAppear {
             try? manager.refreshApps()
@@ -385,7 +385,7 @@ private struct OverrideSelectionView: View {
                     manager.removeOverride(for: app.bundleIdentifier)
                     dismiss()
                 } label: {
-                    Text("Remove Override")
+                    Text("移除覆盖")
                 }
             }
 

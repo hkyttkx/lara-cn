@@ -45,7 +45,7 @@ struct CreditsView: View {
                     LinkCreditIcon(url: "https://github.com/leminlimez.png")
                 }
             }
-            .navigationTitle("Credits")
+            .navigationTitle("致谢")
         }
     }
 }

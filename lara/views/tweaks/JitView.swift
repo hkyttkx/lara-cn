@@ -36,10 +36,10 @@ struct JitView: View {
             List {
                 if !mgr.sbxready {
                     Section {
-                        Text("Sandbox escape not ready. Run the sandbox escape first.")
+                        Text("沙盒逃逸未就绪。请先执行沙盒逃逸。")
                             .foregroundColor(.secondary)
                     } header: {
-                        Text("Status")
+                        Text("状态")
                     }
                 }
 
@@ -58,7 +58,7 @@ struct JitView: View {
 
                 Section {
                     if filteredprocs.isEmpty {
-                        Text(query.isEmpty ? "No apps found." : "No matches.")
+                        Text(query.isEmpty ? "未找到应用" : "No matches.")
                             .foregroundColor(.secondary)
                     } else {
                         ForEach(filteredprocs) { proc in
@@ -91,7 +91,7 @@ struct JitView: View {
                                     if enablingbid == proc.bundle {
                                         ProgressView()
                                     } else {
-                                        Text("Enable")
+                                        Text("启用")
                                     }
                                 }
                                 .disabled(enablingbid != nil || !mgr.dsready)
@@ -99,7 +99,7 @@ struct JitView: View {
                         }
                     }
                 } footer: {
-                    Text("Only works on apps with the `get-task-allow` entitlement.")
+                    Text("仅对带有 `get-task-allow` 权限的应用有效。")
                 }
             }
             .navigationTitle("LaraJIT")

@@ -46,7 +46,7 @@ struct FontPicker: View {
             List {
                 Section {
                     if repostore.repos.isEmpty {
-                        Text("No repos added yet.")
+                        Text("尚未添加任何源")
                             .foregroundColor(.secondary)
                     }
                 }
@@ -59,7 +59,7 @@ struct FontPicker: View {
                             }
                         } else {
                             HStack {
-                                Text("Loading...")
+                                Text("加载中…")
                                 Spacer()
                                 
                                 if repo.isloading {
@@ -83,7 +83,7 @@ struct FontPicker: View {
                                 repoemojirow(mgr: mgr, repo: repodata, emoji: emoji, repostore: repostore, emojipath: emojipath)
                             }
                         } header: {
-                            Text("Emojis — \(repodata.name)")
+                            Text("表情 — \(repodata.name)")
                         }
                     }
                 }
@@ -115,11 +115,11 @@ struct FontPicker: View {
                         }
                     }
                     
-                    Button("Import Font") {
+                    Button("导入字体") {
                         showimporter = true
                     }
                 } header: {
-                    Text("Settings")
+                    Text("设置")
                 } footer: {
                     Text("Some custom fonts will not work for app icons and other stuff, some will not work at all. If you want them to work, patch your .ttf [here](https://neonmodder123.github.io/lara-font-patcher/).")
                 }
@@ -128,12 +128,12 @@ struct FontPicker: View {
                     Text(globallogger.logs.last ?? "No logs yet")
                         .font(.system(size: 13, design: .monospaced))
                     
-                    Button("Respring") {
+                    Button("注销（Respring）") {
                         mgr.respring()
                     }
                 }
             }
-            .navigationTitle("Font Overwrite")
+            .navigationTitle("字体覆盖")
             .task {
                 await repostore.refreshrepos()
             }
@@ -361,7 +361,7 @@ private struct repoemojirow: View {
                 Text(emoji.name)
 				if let remoteurl = URL(string: emoji.url),
            			remoteurl.pathExtension.lowercased() != "ttc" {
-            		Text("not .ttc")
+            		Text("不是 .ttc")
                 	.font(.caption2)
                 	.foregroundColor(.red)
                 	.padding(.horizontal, 5)
@@ -432,18 +432,18 @@ struct FontRepoView: View {
                                 Button(role: .destructive) {
                                     repostore.removerepo(repo.url)
                                 } label: {
-                                    Text("Remove")
+                                    Text("移除")
                                 }
                             }
                         }
                     }
                 } header: {
-                    Text("Repos")
+                    Text("源")
                 } footer: {
                     Text("Make a repo by forking the [template repo](https://github.com/rooootdev/larafonts/) on GitHub and adding your custom fonts there.")
                 }
             }
-            .navigationTitle("Font Repos")
+            .navigationTitle("字体源")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -462,17 +462,17 @@ struct FontRepoView: View {
                     }
                 }
             }
-            .alert("Add Font Repo", isPresented: $showaddrepo) {
+            .alert("添加字体源", isPresented: $showaddrepo) {
                 TextField("URL:", text: $newrepourl)
                     .textInputAutocapitalization(.never)
                     .keyboardType(.URL)
                     .autocorrectionDisabled()
-                Button("Add") {
+                Button("添加") {
                     Task { await repostore.addrepo(newrepourl) }
                 }
-                Button("Cancel", role: .cancel) {}
+                Button("取消", role: .cancel) {}
             } message: {
-                Text("Example: \n\(defaultrepo)")
+                Text("示例：\n\(defaultrepo)")
             }
         }
     }

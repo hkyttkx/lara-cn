@@ -20,16 +20,16 @@ struct ShowHiddenIconsView: View {
         List {
             Section(
                 header: HeaderLabel(text: "Home Screen", icon: "app.badge"),
-                footer: Text("Inspired by Nugget's \"Show Hidden Icons on Home Screen\" tweak. Writes SBIconVisibility to GlobalPreferences. This may not take effect until SpringBoard's Application State DB is rebuilt.")
+                footer: Text("灵感来自 Nugget 的 \"Show Hidden Icons on Home Screen\" tweak. Writes SBIconVisibility to GlobalPreferences. This may not take effect until SpringBoard's Application State DB is rebuilt.")
             ) {
-                Toggle("Show Hidden Icons", isOn: Binding(
+                Toggle("显示隐藏图标", isOn: Binding(
                     get: { isEnabled },
                     set: { setEnabled($0) }
                 ))
                 .disabled(isLoading || !canWrite)
 
                 HStack {
-                    Text("Preference")
+                    Text("偏好设置")
                     Spacer()
                     Text(isEnabled ? "Enabled" : "Disabled")
                         .foregroundColor(isEnabled ? .green : .secondary)
@@ -38,7 +38,7 @@ struct ShowHiddenIconsView: View {
             }
 
             Section(
-                header: HeaderLabel(text: "Actions", icon: "wrench.and.screwdriver"),
+                header: HeaderLabel(text: "操作", icon: "wrench.and.screwdriver"),
                 footer: Text("Refresh only reloads the current SBIconVisibility value from GlobalPreferences. It does not rebuild SpringBoard caches.")
             ) {
                 Button {
@@ -46,12 +46,12 @@ struct ShowHiddenIconsView: View {
                 } label: {
                     if isLoading {
                         HStack {
-                            Text("Refreshing...")
+                            Text("正在刷新…")
                             Spacer()
                             ProgressView()
                         }
                     } else {
-                        Text("Refresh Preference State")
+                        Text("刷新偏好设置状态")
                     }
                 }
                 .disabled(isLoading || !canWrite)
@@ -60,7 +60,7 @@ struct ShowHiddenIconsView: View {
                     Button(role: .destructive) {
                         reset()
                     } label: {
-                        Text("Remove Preference")
+                        Text("移除偏好")
                     }
                     .disabled(isLoading || !canWrite)
 
@@ -68,7 +68,7 @@ struct ShowHiddenIconsView: View {
 
                     Button {
                         Alertinator.shared.alert(
-                            title: "Remove Preference",
+                            title: "移除偏好",
                             body: "Deletes the SBIconVisibility key from GlobalPreferences instead of writing false. This restores the default preference value. If SpringBoard has already cached the old state, you may still need to rebuild the Application State DB and reboot."
                         )
                     } label: {
@@ -82,7 +82,7 @@ struct ShowHiddenIconsView: View {
                     Button(role: .destructive) {
                         confirmRebuildDB = true
                     } label: {
-                        Text("Rebuild Application State DB")
+                        Text("重建应用状态数据库")
                     }
                     .disabled(isLoading || !canWrite)
 
@@ -90,7 +90,7 @@ struct ShowHiddenIconsView: View {
 
                     Button {
                         Alertinator.shared.alert(
-                            title: "Rebuild Application State DB",
+                            title: "重建应用状态数据库",
                             body: "Clears SpringBoard's applicationState.db, applicationState.db-wal, and applicationState.db-shm so SpringBoard rebuilds them. Reboot after applying. Respring may leave SpringBoard on a black screen, and some widget configuration may be lost."
                         )
                     } label: {
@@ -101,22 +101,22 @@ struct ShowHiddenIconsView: View {
                 }
             }
         }
-        .navigationTitle("Show Hidden Icons")
+        .navigationTitle("显示隐藏图标")
         .onAppear {
             loadState()
         }
-        .alert("Show Hidden Icons", isPresented: .constant(status != nil)) {
-            Button("OK") { status = nil }
+        .alert("显示隐藏图标", isPresented: .constant(status != nil)) {
+            Button("确定") { status = nil }
         } message: {
             Text(status ?? "")
         }
-        .alert("Rebuild Application State DB?", isPresented: $confirmRebuildDB) {
-            Button("Cancel", role: .cancel) {}
-            Button("Rebuild", role: .destructive) {
+        .alert("重建应用状态数据库？", isPresented: $confirmRebuildDB) {
+            Button("取消", role: .cancel) {}
+            Button("重建", role: .destructive) {
                 rebuildApplicationStateDB()
             }
         } message: {
-            Text("This matches Nugget's \"Rebuild SpringBoard Application State DB\" option. It replaces SpringBoard's applicationState.db with an empty file so SpringBoard can rebuild it. You should reboot the device after applying. Respring may leave SpringBoard on a black screen. Rebuilding this DB can also reset some app/widget state, including widget configuration. Continue only if you accept that risk.")
+            Text("与 Nugget 的 \"Rebuild SpringBoard Application State DB\" option. It replaces SpringBoard's applicationState.db with an empty file so SpringBoard can rebuild it. You should reboot the device after applying. Respring may leave SpringBoard on a black screen. Rebuilding this DB can also reset some app/widget state, including widget configuration. Continue only if you accept that risk.")
         }
     }
 

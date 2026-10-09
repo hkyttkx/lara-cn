@@ -8,9 +8,9 @@ struct OTAView: View {
 
     var body: some View {
         List {
-            Section(header: HeaderLabel(text: "Status", icon: "antenna.radiowaves.left.and.right")) {
+            Section(header: HeaderLabel(text: "状态", icon: "antenna.radiowaves.left.and.right")) {
                 HStack {
-                    Text("OTA Updates")
+                    Text("OTA 更新")
                     Spacer()
                     Text(otaDisabled ? "Disabled" : "Enabled")
                         .foregroundColor(otaDisabled ? .red : .green)
@@ -19,7 +19,7 @@ struct OTAView: View {
             }
 
             Section(
-                header: HeaderLabel(text: "Actions", icon: "wrench.and.screwdriver"),
+                header: HeaderLabel(text: "操作", icon: "wrench.and.screwdriver"),
                 footer: Text("Modifies launchd's disabled.plist via RemoteCall to prevent OTA update daemons from running. A reboot is required for changes to take effect.")
             ) {
                 Button {
@@ -27,12 +27,12 @@ struct OTAView: View {
                 } label: {
                     if isWorking && !otaDisabled {
                         HStack {
-                            Text("Disabling…")
+                            Text("正在禁用…")
                             Spacer()
                             ProgressView()
                         }
                     } else {
-                        Text("Disable OTA Updates")
+                        Text("禁用 OTA 更新")
                     }
                 }
                 .disabled(isWorking || otaDisabled)
@@ -42,25 +42,25 @@ struct OTAView: View {
                 } label: {
                     if isWorking && otaDisabled {
                         HStack {
-                            Text("Enabling…")
+                            Text("正在启用…")
                             Spacer()
                             ProgressView()
                         }
                     } else {
-                        Text("Enable OTA Updates")
+                        Text("启用 OTA 更新")
                     }
                 }
                 .disabled(isWorking || !otaDisabled)
             }
         }
-        .navigationTitle("OTA Updates")
+        .navigationTitle("OTA 更新")
         .onAppear {
             if !otaDisabled {
                 syncStateFromPlist()
             }
         }
-        .alert("Result", isPresented: .constant(lastResult != nil)) {
-            Button("OK") { lastResult = nil }
+        .alert("结果", isPresented: .constant(lastResult != nil)) {
+            Button("确定") { lastResult = nil }
         } message: {
             Text(lastResult ?? "")
         }

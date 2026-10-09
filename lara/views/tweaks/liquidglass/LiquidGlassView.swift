@@ -24,8 +24,8 @@ struct LiquidGlassView: View {
         NavigationStack {
             List {
                 Section(header: HeaderLabel(text: "Applying", icon: "checkmark")) {
-                    Button("Apply Tweaks", action: { applyLiquidGlass() })
-                    Button("Reset Tweaks", action: { restoreLiquidGlass() })
+                    Button("应用调整", action: { applyLiquidGlass() })
+                    Button("重置调整", action: { restoreLiquidGlass() })
                 }
                 
                 Section(header: HeaderLabel(text: "Preview", icon: "eye")) {
@@ -38,7 +38,7 @@ struct LiquidGlassView: View {
                     Toggle("Disable Liquid Glass", isOn: gpKeyBinding("com.apple.SwiftUI.DisableSolarium"))
                 }
                 
-                Section(header: HeaderLabel(text: "Liquid Glass", icon: "square.on.square.intersection.dashed")) {
+                Section(header: HeaderLabel(text: "液态玻璃", icon: "square.on.square.intersection.dashed")) {
                     Toggle("Disable Specular Motion", isOn: gpKeyBinding("SBDisableSpecularEverywhereUsingLSSAssertion"))
                     Toggle("Disable Outer Refraction", isOn: gpKeyBinding("SolariumDisableOuterRefraction"))
                     Toggle("Disable Solarium HDR", isOn: gpKeyBinding("SolariumAllowHDR", default: true, enable: false))
@@ -50,7 +50,7 @@ struct LiquidGlassView: View {
                     Toggle("Disable Liquid Glass on Dock", isOn: gpKeyBinding("SBDisableGlassDock"))
                 }
             }
-            .navigationTitle("Liquid Glass")
+            .navigationTitle("液态玻璃")
             .onAppear {
                 loadGPData()
             }
@@ -60,7 +60,7 @@ struct LiquidGlassView: View {
     // MARK: file loading functions. root you said that making my comments uppercase sounds like i'm vibecoding so this will all be lowercase from now on.
     private func loadGPData() {
         let docsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let gpSavedURL = docsDir.appendingPathComponent("SavedGlobalPrefs.plist")
+        let gpSavedURL = docsDir.appendingPathComponent("已保存GlobalPrefs.plist")
         let gpCurrentURL = URL(fileURLWithPath: gpCurrentPath)
         
         do {
@@ -71,7 +71,7 @@ struct LiquidGlassView: View {
             
             gpCurrentDict = try NSMutableDictionary(contentsOf: URL(fileURLWithPath: gpCurrentPath), error: ())
         } catch {
-            Alertinator.shared.alert(title: "Failed to load Global Preferences data!", body: "Please restart the app and try again.")
+            Alertinator.shared.alert(title: "加载全局偏好数据失败！", body: "Please restart the app and try again.")
         }
     }
     
@@ -82,19 +82,19 @@ struct LiquidGlassView: View {
             let result = mgr.lara_overwritefile(target: gpCurrentPath, data: gpData)
             
             if result.ok {
-                Alertinator.shared.alert(title: "Successfully applied Liquid Glass Tweaks!", body: "Reboot your device to see any changes")
+                Alertinator.shared.alert(title: "液态玻璃效果已应用！", body: "Reboot your device to see any changes")
             } else {
                 throw "Overwrite failed: \(result.message)"
             }
         } catch {
-            Alertinator.shared.alert(title: "Failed to enable Liquid Glass Tweaks!", body: "\(error)")
+            Alertinator.shared.alert(title: "启用液态玻璃效果失败！", body: "\(error)")
         }
     }
     
     func restoreLiquidGlass() {
         do {
             let docsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let gpSavedURL = docsDir.appendingPathComponent("SavedGlobalPrefs.plist")
+            let gpSavedURL = docsDir.appendingPathComponent("已保存GlobalPrefs.plist")
             
             if FileManager.default.fileExists(atPath: gpSavedURL.path) {
                 let restored = try NSMutableDictionary(contentsOf: gpSavedURL, error: ())
@@ -104,7 +104,7 @@ struct LiquidGlassView: View {
                 throw "No Global Prefs file found!"
             }
         } catch {
-            Alertinator.shared.alert(title: "Failed to restore Liquid Glass!", body: "\(error)")
+            Alertinator.shared.alert(title: "还原液态玻璃失败！", body: "\(error)")
         }
     }
     

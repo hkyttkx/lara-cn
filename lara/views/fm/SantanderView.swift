@@ -48,8 +48,8 @@ struct SantanderView: View {
                     VStack {
                         Image(systemName: "externaldrive.trianglebadge.exclamationmark")
                             .imageScale(.large)
-                        Text("File Manager Not Ready!")
-                        Text("Go back to the homepage, click Run Exploit, and then click Initalize System.")
+                        Text("文件管理器未就绪！")
+                        Text("返回主页，点击「运行漏洞利用」，然后点击「初始化系统」。")
                             .multilineTextAlignment(.center)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)

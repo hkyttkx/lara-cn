@@ -43,9 +43,9 @@ struct DecryptView: View {
             List {
                 if !mgr.sbxready {
                     Section {
-                        Text("Sandbox escape not ready. Run the sandbox escape first.")
+                        Text("沙盒逃逸未就绪。请先执行沙盒逃逸。")
                             .foregroundColor(.secondary)
-                    } header: { Text("Status") }
+                    } header: { Text("状态") }
                 }
 
                 HStack {
@@ -60,13 +60,13 @@ struct DecryptView: View {
 
                 if let error = errormsg {
                     Section {
-                        PlainAlert(title: "Error", icon: "exclamationmark.triangle", text: error, color: .red)
+                        PlainAlert(title: "错误", icon: "exclamationmark.triangle", text: error, color: .red)
                     }
                 }
 
                 Section {
                     if filteredapps.isEmpty {
-                        Text(query.isEmpty ? "Loading..." : "No matches.")
+                        Text(query.isEmpty ? "加载中…" : "No matches.")
                             .foregroundColor(.secondary)
                     } else {
                         ForEach(filteredapps) { app in
@@ -79,7 +79,7 @@ struct DecryptView: View {
                     HeaderLabel(text: "Installed Apps", icon: "app.badge")
                 }
             }
-            .navigationTitle("App Decrypt")
+            .navigationTitle("应用解密")
         }
         .onAppear {
             set_log_callback { msg in
@@ -183,7 +183,7 @@ struct DecryptView: View {
         }
         if total > 200 * 1024 * 1024 {
             Alertinator.shared.alert(
-                title: "Large App",
+                title: "大型应用",
                 body: "This app is over 200 MB, decryption may take a while.",
                 actionLabel: "Continue",
                 action: { self.runDecrypt(app) }
@@ -266,7 +266,7 @@ struct DecryptView: View {
             guard let enumerator = fm.enumerator(atPath: app.bundlePath) else {
                 DispatchQueue.main.async {
                     decryptingbid = nil
-                    errormsg = "Failed to enumerate bundle for copy"
+                    errormsg = "失败 to enumerate bundle for copy"
                     laramgr.shared.logmsg("(decrypt) cannot enumerate \(app.bundlePath)")
                 }
                 return
@@ -289,7 +289,7 @@ struct DecryptView: View {
             guard mainRet == 0 else {
                 DispatchQueue.main.async {
                     decryptingbid = nil
-                    errormsg = "Failed to decrypt main binary"
+                    errormsg = "失败 to decrypt main binary"
                     laramgr.shared.logmsg("(decrypt) main binary decrypt failed")
                 }
                 return
@@ -318,7 +318,7 @@ struct DecryptView: View {
             } catch {
                 DispatchQueue.main.async {
                     decryptingbid = nil
-                    errormsg = "Failed to move app bundle: \(error.localizedDescription)"
+                    errormsg = "失败 to move app bundle: \(error.localizedDescription)"
                     laramgr.shared.logmsg("(decrypt) move failed: \(error.localizedDescription)")
                 }
                 return
@@ -332,7 +332,7 @@ struct DecryptView: View {
             } catch {
                 DispatchQueue.main.async {
                     decryptingbid = nil
-                    errormsg = "Failed to create ipa: \(error.localizedDescription)"
+                    errormsg = "失败 to create ipa: \(error.localizedDescription)"
                     laramgr.shared.logmsg("(decrypt) zip failed: \(error.localizedDescription)")
                 }
                 return
@@ -374,11 +374,11 @@ struct AppRow: View {
                 HStack(spacing: 4) {
                     switch app.isEncrypted {
                     case .encrypted:
-                        Text("Encrypted").font(.caption2).foregroundStyle(.orange)
+                        Text("已加密").font(.caption2).foregroundStyle(.orange)
                     case .unencrypted:
-                        Text("Unencrypted").font(.caption2).foregroundStyle(.green)
+                        Text("未加密").font(.caption2).foregroundStyle(.green)
                     case .unknown:
-                        Text("Not eligible").font(.caption2).foregroundStyle(.gray)
+                        Text("不符合条件").font(.caption2).foregroundStyle(.gray)
                     }
                 }
             }
@@ -389,13 +389,13 @@ struct AppRow: View {
             case .encrypted:
                 Button(action: ondecrypt) {
                     if isdecrypting { ProgressView() }
-                    else { Text("Decrypt") }
+                    else { Text("解密") }
                 }
                 .disabled(isdecrypting)
             case .unknown:
                 Button(action: ondecrypt) {
                     if isdecrypting { ProgressView() }
-                    else { Text("Decrypt") }
+                    else { Text("解密") }
                 }
                 .disabled(true)
             case .unencrypted:

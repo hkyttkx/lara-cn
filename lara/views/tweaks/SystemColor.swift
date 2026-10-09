@@ -198,7 +198,7 @@ struct SystemColor: View {
                         }
                     }
                 } footer: {
-                    Text("[Respring](https://roooot.dev/respring.html) to apply. \n")
+                    Text("[注销](https://roooot.dev/respring.html) to apply. \n")
                     + Text(status)
                 }
                 
@@ -218,7 +218,7 @@ struct SystemColor: View {
                             Text("Yupa")
                                 .font(.headline)
                             
-                            Text("The original [SystemColors Patcher](https://yupa-tt.github.io/SystemColor/).")
+                            Text("原始 [SystemColors Patcher](https://yupa-tt.github.io/SystemColor/).")
                                 .font(.subheadline)
                                 .foregroundColor(Color.secondary)
                         }
@@ -232,10 +232,10 @@ struct SystemColor: View {
                         }
                     }
                 } header: {
-                    Text("Credits")
+                    Text("致谢")
                 }
             }
-            .navigationTitle("SystemColors")
+            .navigationTitle("系统配色")
             .toolbar {
                 Button {
                     apply()
@@ -275,7 +275,7 @@ struct SystemColor: View {
             status = "Loaded \(entries.count) colors"
 
         } catch {
-            status = "Failed: \(error.localizedDescription)"
+            status = "失败: \(error.localizedDescription)"
             print(error)
         }
     }
@@ -309,7 +309,7 @@ struct SystemColor: View {
         }
 
         let res = mgr.lara_overwritefile(target: syspath, source: tmp)
-        status = res.ok ? "Patched!" : "Failed: \(res.message)"
+        status = res.ok ? "Patched!" : "失败: \(res.message)"
 
         try? FileManager.default.removeItem(atPath: tmp)
     }

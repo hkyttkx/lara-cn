@@ -23,7 +23,7 @@ public struct LicenseView: View {
                     }
                 }
             }
-            .navigationTitle("Licenses")
+            .navigationTitle("许可协议")
         }
         .onAppear {
             licenseDict = getLicenseDict()
@@ -50,7 +50,7 @@ public struct LicenseDetailsView: View {
                             Button(action: {
                                 UIPasteboard.general.string = licenseText
                             }) {
-                                Label("Copy to Clipboard", systemImage: "doc.on.doc")
+                                Label("复制到剪贴板", systemImage: "doc.on.doc")
                             }
                         }
                 }

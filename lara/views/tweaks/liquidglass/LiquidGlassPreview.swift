@@ -20,9 +20,9 @@ struct LiquidGlassPreview: View {
                     .background(.blue)
                     .clipShape(.rect(cornerRadius: 14))
                 VStack(alignment: .leading) {
-                    Text("App Notification")
+                    Text("应用通知")
                         .fontWeight(.medium)
-                    Text("This is a notification!")
+                    Text("这是一条通知！")
                 }
                 .font(.system(size: 14))
             }

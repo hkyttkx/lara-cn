@@ -24,7 +24,7 @@ struct CustomView: View {
                     .autocorrectionDisabled(true)
 
                 HStack {
-                    Text("Source")
+                    Text("来源")
                     Spacer()
                     Text(srcname)
                         .foregroundColor(.secondary)
@@ -32,7 +32,7 @@ struct CustomView: View {
                         .truncationMode(.middle)
                 }
 
-                Button("Choose Source File") {
+                Button("选择源文件") {
                     showimport = true
                 }
 
@@ -42,7 +42,7 @@ struct CustomView: View {
                 }
                 .disabled(!canoverwrite)
             } header: {
-                Text("Custom Path Overwrite")
+                Text("自定义路径覆盖")
             } footer: {
                 Text("This will overwrite the target file with the contents of the selected source file. Target size must be >= source size.")
             }
@@ -52,7 +52,7 @@ struct CustomView: View {
                     .font(.system(size: 13, design: .monospaced))
             }
         }
-        .navigationTitle("Custom Overwrite")
+        .navigationTitle("自定义覆盖")
         .fileImporter(
             isPresented: $showimport,
             allowedContentTypes: [.item],

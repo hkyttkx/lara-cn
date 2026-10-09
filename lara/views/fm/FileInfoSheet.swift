@@ -106,7 +106,7 @@ struct santanderinfosheet: View {
                     }
                 }
             }
-            .navigationTitle("File Info")
+            .navigationTitle("文件信息")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
@@ -148,7 +148,7 @@ struct santandernamesheet: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") {
+                    Button("取消") {
                         dismiss()
                     }
                 }
@@ -181,22 +181,22 @@ struct santandernewfilesheet: View {
                         .textInputAutocapitalization(.never)
                 }
 
-                Section("Contents") {
+                Section("内容") {
                     TextEditor(text: $text)
                         .frame(minHeight: 180)
                         .font(.system(.body, design: .monospaced))
                 }
             }
-            .navigationTitle("Create File")
+            .navigationTitle("新建文件")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") {
+                    Button("取消") {
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Create") {
+                    Button("创建") {
                         apply(name, text)
                         dismiss()
                     }
@@ -223,16 +223,16 @@ struct santanderchmodsheet: View {
                         .font(.system(.body, design: .monospaced))
                 }
             }
-            .navigationTitle("Chmod")
+            .navigationTitle("修改权限")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") {
+                    Button("取消") {
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Apply") {
+                    Button("应用") {
                         guard let mode = UInt16(text, radix: 8) else { return }
                         apply(mode)
                         dismiss()
@@ -262,16 +262,16 @@ struct santanderchownsheet: View {
                         .keyboardType(.numberPad)
                 }
             }
-            .navigationTitle("Chown")
+            .navigationTitle("修改属主")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") {
+                    Button("取消") {
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Apply") {
+                    Button("应用") {
                         guard let uid = UInt32(uid), let gid = UInt32(gid) else { return }
                         apply(uid, gid)
                         dismiss()

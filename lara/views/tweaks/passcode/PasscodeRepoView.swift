@@ -73,16 +73,16 @@ struct PasscodeRepoView: View {
                                 Button(role: .destructive) {
                                     gallery.removeRepo(repo.url)
                                 } label: {
-                                    Text("Remove")
+                                    Text("移除")
                                 }
                             }
                         }
                     }
                 } header: {
-                    Text("Repos")
+                    Text("源")
                 }
             }
-            .navigationTitle("Passcode Repos")
+            .navigationTitle("密码主题源")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -100,17 +100,17 @@ struct PasscodeRepoView: View {
                     }
                 }
             }
-            .alert("Add Passcode Repo", isPresented: $showAddRepo) {
+            .alert("添加密码主题源", isPresented: $showAddRepo) {
                 TextField("URL", text: $newRepoURL)
                     .textInputAutocapitalization(.never)
                     .keyboardType(.URL)
                     .autocorrectionDisabled()
-                Button("Add") {
+                Button("添加") {
                     Task { await gallery.addRepo(newRepoURL) }
                 }
-                Button("Cancel", role: .cancel) {}
+                Button("取消", role: .cancel) {}
             } message: {
-                Text("Enter the URL to a passcode theme repo JSON.")
+                Text("输入密码主题源的 JSON URL")
             }
         }
     }

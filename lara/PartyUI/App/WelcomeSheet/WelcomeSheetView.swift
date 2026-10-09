@@ -21,7 +21,7 @@ public struct WelcomeSheetView<Context: View, Buttons: View>: View {
     public var body: some View {
         VStack {
             VStack {
-                Text("Welcome to")
+                Text("欢迎使用")
                     .font(.title2)
                 Text(appName)
                     .font(.system(.largeTitle, weight: .semibold))

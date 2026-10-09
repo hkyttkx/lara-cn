@@ -50,16 +50,16 @@ struct GeneralOption: Identifiable {
 struct SpringBoardView: View {
     // list of options
     @State var tweakOptions: [GeneralOption] = [
-        .init(value: getDefaultStr(forKey: "Dock"), key: "Dock", sbType: .dock, title: NSLocalizedString("Dock", comment: "Springboard tool"), imageName: "dock.rectangle", fileType: OverwritingFileTypes.springboard, options: ["Visible", "Color", "Disabled"]),
+        .init(value: getDefaultStr(forKey: "Dock"), key: "Dock", sbType: .dock, title: NSLocalizedString("Dock", comment: "Springboard tool"), imageName: "dock.rectangle", fileType: OverwritingFileTypes.springboard, options: ["Visible", "颜色", "Disabled"]),
         .init(value: getDefaultStr(forKey: "HomeBar"), key: "HomeBar", title: NSLocalizedString("Home Bar", comment: "Springboard tool"), imageName: "iphone", fileType: OverwritingFileTypes.springboard, options: ["Visible", "Disabled"], maxVers: 26.0),
-        .init(value: getDefaultStr(forKey: "FolderBG"), key: "FolderBG", sbType: .folder, title: NSLocalizedString("Folder Background", comment: "Springboard tool"), imageName: "folder", fileType: OverwritingFileTypes.springboard, options: ["Visible", "Color", "Disabled"]),
-        .init(value: getDefaultStr(forKey: "FolderBlur"), key: "FolderBlur", sbType: .folderBG, title: NSLocalizedString("Folder Blur", comment: "Springboard tool"), imageName: "folder.circle", fileType: OverwritingFileTypes.springboard, options: ["Visible", "Color", "Disabled"]),
-        .init(value: getDefaultStr(forKey: "CCModuleBG"), key: "CCModuleBG", sbType: .module, title: NSLocalizedString("CC Module Background", comment: "Springboard tool"), shortTitle: "CC Module BG", imageName: "switch.2", fileType: OverwritingFileTypes.cc, options: ["Visible", "Color", "Disabled"]),
-        .init(value: getDefaultStr(forKey: "CCBG"), key: "CCBG", sbType: .moduleBG, title: NSLocalizedString("CC Background Blur", comment: "Springboard tool"), imageName: "switch.2", fileType: OverwritingFileTypes.springboard, options: ["Visible", "Color", "Disabled"]),
+        .init(value: getDefaultStr(forKey: "FolderBG"), key: "FolderBG", sbType: .folder, title: NSLocalizedString("Folder Background", comment: "Springboard tool"), imageName: "folder", fileType: OverwritingFileTypes.springboard, options: ["Visible", "颜色", "Disabled"]),
+        .init(value: getDefaultStr(forKey: "FolderBlur"), key: "FolderBlur", sbType: .folderBG, title: NSLocalizedString("Folder Blur", comment: "Springboard tool"), imageName: "folder.circle", fileType: OverwritingFileTypes.springboard, options: ["Visible", "颜色", "Disabled"]),
+        .init(value: getDefaultStr(forKey: "CCModuleBG"), key: "CCModuleBG", sbType: .module, title: NSLocalizedString("CC Module Background", comment: "Springboard tool"), shortTitle: "CC Module BG", imageName: "switch.2", fileType: OverwritingFileTypes.cc, options: ["Visible", "颜色", "Disabled"]),
+        .init(value: getDefaultStr(forKey: "CCBG"), key: "CCBG", sbType: .moduleBG, title: NSLocalizedString("CC Background Blur", comment: "Springboard tool"), imageName: "switch.2", fileType: OverwritingFileTypes.springboard, options: ["Visible", "颜色", "Disabled"]),
         .init(value: getDefaultStr(forKey: "Switcher"), key: "Switcher", sbType: .switcher, title: NSLocalizedString("App Switcher Blur", comment: "Springboard tool"), imageName: "apps.iphone", fileType: OverwritingFileTypes.springboard, options: ["Visible", "Blur", "Disabled"], maxVers: 26.0),
-        .init(value: getDefaultStr(forKey: "PodBG"), key: "PodBG", sbType: .libraryFolder, title: NSLocalizedString("Library Pod Background", comment: "Springboard tool"), shortTitle: "Library Pod BG", imageName: "square.stack", fileType: OverwritingFileTypes.springboard, options: ["Visible", "Color", "Disabled"]),
-        .init(value: getDefaultStr(forKey: "NotifBG"), key: "NotifBG", sbType: .notif, title: NSLocalizedString("Notification Banner Background", comment: "Springboard tool"), shortTitle: "Notification BG", imageName: "platter.filled.top.iphone", fileType: OverwritingFileTypes.springboard, options: ["Visible", "Color", "Disabled"]),
-        .init(value: getDefaultStr(forKey: "NotifShadow"), key: "NotifShadow", sbType: .notifShadow, title: NSLocalizedString("Notification Banner Shadow", comment: "Springboard tool"), shortTitle: "Notification Shadow", imageName: "platter.filled.top.iphone", fileType: OverwritingFileTypes.springboard, options: ["Visible", "Color", "Disabled"]),
+        .init(value: getDefaultStr(forKey: "PodBG"), key: "PodBG", sbType: .libraryFolder, title: NSLocalizedString("Library Pod Background", comment: "Springboard tool"), shortTitle: "Library Pod BG", imageName: "square.stack", fileType: OverwritingFileTypes.springboard, options: ["Visible", "颜色", "Disabled"]),
+        .init(value: getDefaultStr(forKey: "NotifBG"), key: "NotifBG", sbType: .notif, title: NSLocalizedString("Notification Banner Background", comment: "Springboard tool"), shortTitle: "Notification BG", imageName: "platter.filled.top.iphone", fileType: OverwritingFileTypes.springboard, options: ["Visible", "颜色", "Disabled"]),
+        .init(value: getDefaultStr(forKey: "NotifShadow"), key: "NotifShadow", sbType: .notifShadow, title: NSLocalizedString("Notification Banner Shadow", comment: "Springboard tool"), shortTitle: "Notification Shadow", imageName: "platter.filled.top.iphone", fileType: OverwritingFileTypes.springboard, options: ["Visible", "颜色", "Disabled"]),
     ]
 
     let mgr: laramgr
@@ -79,10 +79,10 @@ struct SpringBoardView: View {
         NavigationStack {
             List {
                 Section(header: HeaderLabel(text: "Applying", icon: "checkmark")) {
-                    Button("Apply") {
+                    Button("应用") {
                         applyTweaks()
                     }
-                    Button("Reset all") {
+                    Button("全部重置") {
                         for ind in tweakOptions.indices {
                             tweakOptions[ind].value = "Visible"
                             tweakOptions[ind].selectedOption = "Visible"
@@ -105,10 +105,10 @@ struct SpringBoardView: View {
                                 option.value = newvalue
                                 UserDefaults.standard.set(newvalue, forKey: option.key)
                             }
-                            if option.selectedOption == "Color" || option.selectedOption == "Blur" {
-                                if option.selectedOption == "Color" {
+                            if option.selectedOption == "颜色" || option.selectedOption == "Blur" {
+                                if option.selectedOption == "颜色" {
                                     HStack(spacing: 12) {
-                                        Text("Color")
+                                        Text("颜色")
                                         Spacer()
                                         Text(colortohex(option.color))
                                             .monospaced()
@@ -127,7 +127,7 @@ struct SpringBoardView: View {
                                     }
                                 }
                                 HStack {
-                                    Text("Blur:")
+                                    Text("模糊度：")
                                     Spacer()
                                     Text("\(Int(option.blur))")
                                         .monospaced()
@@ -146,7 +146,7 @@ struct SpringBoardView: View {
                     }
                 }
             }
-            .navigationTitle("SpringBoard Tools")
+            .navigationTitle("SpringBoard 工具")
             .onAppear {
                 load()
             }
@@ -158,7 +158,7 @@ struct SpringBoardView: View {
             tweakOptions[i].value = getDefaultStr(forKey: option.key)
             tweakOptions[i].selectedOption = tweakOptions[i].value
             if option.sbType != nil {
-                if option.value == "Color" {
+                if option.value == "颜色" {
                     tweakOptions[i].color = SpringboardColorManager.getColor(forType: option.sbType!)
                     tweakOptions[i].blur = SpringboardColorManager.getBlur(forType: option.sbType!)
                 }
@@ -196,7 +196,7 @@ struct SpringBoardView: View {
                 if succeeded {
                     print("Successfully applied tweak \"" + option.title + "\"")
                 } else {
-                    print("Failed to apply tweak \"" + option.title + "\"!!!")
+                    print("失败 to apply tweak \"" + option.title + "\"!!!")
                     failed = true
                 }
                 
@@ -208,14 +208,14 @@ struct SpringBoardView: View {
                         if succeeded {
                             print("Successfully applied tweak \"" + option.title + "\"")
                         } else {
-                            print("Failed to apply tweak \"" + option.title + "\"!!!")
+                            print("失败 to apply tweak \"" + option.title + "\"!!!")
                         }
                     } else {
                         do {
                             try SpringboardColorManager.revertFiles(forType: option.sbType!)
                             print("Successfully applied tweak \"" + option.title + "\"")
                         } catch {
-                            print("Failed to apply tweak \"" + option.title + "\"!!!")
+                            print("失败 to apply tweak \"" + option.title + "\"!!!")
                             print(error.localizedDescription)
                         }
                     }
@@ -224,18 +224,18 @@ struct SpringBoardView: View {
                     if succeeded {
                         print("Successfully applied tweak \"" + option.title + "\"")
                     } else {
-                        print("Failed to apply tweak \"" + option.title + "\"!!!")
+                        print("失败 to apply tweak \"" + option.title + "\"!!!")
                     }
                 }
                 
-            } else if option.value == "Color" || option.value == "Blur" {
+            } else if option.value == "颜色" || option.value == "Blur" {
                 if option.sbType != nil {
                     print("Applying tweak \"" + option.title + "\"")
                     let succeeded = apply(option.sbType!, option.color, Int(option.blur))
                     if succeeded {
                         print("Successfully applied tweak \"" + option.title + "\"")
                     } else {
-                        print("Failed to apply tweak \"" + option.title + "\"!!!")
+                        print("失败 to apply tweak \"" + option.title + "\"!!!")
                         failed = true
                     }
                 } else {
@@ -245,9 +245,9 @@ struct SpringBoardView: View {
             }
         }
         if failed {
-            Alertinator.shared.alert(title: "useless ass alert", body: "something failed while applying tweaks")
+            Alertinator.shared.alert(title: "无用提示", body: "something failed while applying tweaks")
         } else {
-            Alertinator.shared.alert(title: "Success!", body: "Respring to see changes.", actionLabel: "Respring", action: { mgr.respring() })
+            Alertinator.shared.alert(title: "成功！", body: "Respring to see changes.", actionLabel: "注销（Respring）", action: { mgr.respring() })
         }
     }
     

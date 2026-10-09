@@ -36,27 +36,27 @@ struct RemoteView: View {
                     .textInputAutocapitalization(.never)
 
                 Button {
-                    run("Status Bar Time Format") {
+                    run("状态栏时间格式") {
                         status_bar_time_format(mgr.sbProc, statusBarTimeFormat)
                         return "status_bar_time_format() done"
                     }
                 } label: {
-                    Text("Apply")
+                    Text("应用")
                 }
             } header: {
-                Text("Status Bar Time Format")
+                Text("状态栏时间格式")
             } footer: {
-                Text("The text automatically updates every MINUTE")
+                Text("文字每分钟自动更新")
             }
 
             Section {
                 Button {
-                    run("Hide Icon Labels") {
+                    run("隐藏图标标签") {
                         let hidden = hide_icon_labels(mgr.sbProc)
                         return "hide_icon_labels() -> \(hidden)"
                     }
                 } label: {
-                    Text("Hide Icon Labels")
+                    Text("隐藏图标标签")
                 }
             } header: {
                 Text("SpringBoard")
@@ -65,7 +65,7 @@ struct RemoteView: View {
             Section {
                 Stepper(value: $hsColumns, in: 1...10) {
                     HStack {
-                        Text("Home screen columns")
+                        Text("主屏幕列数")
                         Spacer()
                         Text("\(hsColumns)")
                             .foregroundColor(.secondary)
@@ -75,7 +75,7 @@ struct RemoteView: View {
                 
                 Stepper(value: $hsRows, in: 1...10) {
                     HStack {
-                        Text("Home screen rows")
+                        Text("主屏幕行数")
                         Spacer()
                         Text("\(hsRows)")
                             .foregroundColor(.secondary)
@@ -90,14 +90,14 @@ struct RemoteView: View {
                             : "patch_homescreen_grid(\(hsColumns), \(hsRows)) -> failed"
                     }
                 } label: {
-                    Text("Apply Home Screen Grid")
+                    Text("应用主屏幕网格")
                 }
             }
 
             Section {
                 Stepper(value: $columns, in: 1...dockMaxColumns) {
                     HStack {
-                        Text("Dock columns")
+                        Text("Dock 列数")
                         Spacer()
                         Text("\(columns)")
                             .foregroundColor(.secondary)
@@ -118,33 +118,33 @@ struct RemoteView: View {
                             : "set_dock_icon_count(\(columns)) -> failed (\(result))"
                     }
                 } label: {
-                    Text("Apply Dock Columns")
+                    Text("应用 Dock 列数")
                 }
             }
 
             Section {
                 Button {
-                    run("Enable Upside Down") {
+                    run("启用屏幕倒转") {
                         let result = enable_upside_down(mgr.sbProc)
                         return result == 0
                             ? "enable_upside_down() -> ok"
                             : "enable_upside_down() -> failed (\(result))"
                     }
                 } label: {
-                    Text("Enable Upside Down")
+                    Text("启用屏幕倒转")
                 }
             }
 
             Section {
                 Button {
-                    run("Enable Floating Dock") {
+                    run("启用悬浮 Dock") {
                         let result = enable_floating_dock(mgr.sbProc)
                         return result == 0
                             ? "enable_floating_dock() -> ok"
                             : "enable_floating_dock() -> failed (\(result))"
                     }
                 } label: {
-                    Text("Enable Floating Dock")
+                    Text("启用悬浮 Dock")
                 }
                 
                 Button {
@@ -155,18 +155,18 @@ struct RemoteView: View {
                             : "enable_grid_app_switcher() -> failed (\(result))"
                     }
                 } label: {
-                    Text("Enable Grid App Switcher (Broken animation)")
+                    Text("启用网格应用切换器（动画异常）")
                 }
                 
                 Button {
-                    run("Enable UIKit Debug Overlay") {
+                    run("启用 UIKit 调试层") {
                         let result = enable_debug_overlay(mgr.sbProc)
                         return result == 0
                             ? "enable_debug_overlay() -> ok"
                             : "enable_debug_overlay() -> failed (\(result))"
                     }
                 } label: {
-                    Text("Enable UIKit Debug Overlay")
+                    Text("启用 UIKit 调试层")
                 }
 
                 /*
@@ -177,21 +177,21 @@ struct RemoteView: View {
                 }
                 */
             } footer: {
-                Text("To use UIKit Debug Overlay, double tap the status bar.")
+                Text("双击状态栏可使用 UIKit 调试层。")
             }
             
             Section {
                 Picker("Performance HUD", selection: $performanceHUD) {
-                    Text("Off").tag(-1)
-                    Text("Basic").tag(0)
-                    Text("Backdrops").tag(1)
-                    Text("Particles").tag(2)
-                    Text("Full").tag(3)
-                    Text("Power").tag(5)
+                    Text("关闭").tag(-1)
+                    Text("基础").tag(0)
+                    Text("背景").tag(1)
+                    Text("粒子效果").tag(2)
+                    Text("完整").tag(3)
+                    Text("电源").tag(5)
                     Text("EDR").tag(7)
-                    Text("Glitches").tag(8)
-                    Text("GPU Time").tag(9)
-                    Text("Memory Bandwidth").tag(10)
+                    Text("故障效果").tag(8)
+                    Text("GPU 耗时").tag(9)
+                    Text("内存带宽").tag(10)
                 }
                 .onChange(of: performanceHUD) { newValue in
                     set_performance_hud(mgr.sbProc, Int32(newValue))
@@ -205,7 +205,7 @@ struct RemoteView: View {
                 Text("These call into SpringBoard via RemoteCall. Keep RemoteCall initialized while running them.")
                 
                 if !mgr.rcready {
-                    Text("RemoteCall is not initialized. How are you here?")
+                    Text("远程调用未初始化。你怎么到这来的？")
                 }
             }
             .disabled(!mgr.rcready || running)
@@ -225,7 +225,7 @@ struct RemoteView: View {
                         }
                     } label: {
                         HStack {
-                            Text("Overwrite eligibility (one time setup)")
+                            Text("覆盖资格（一次性设置）")
                             if let state = mgr.eligibilitystate {
                                 Spacer()
                                 if state {
@@ -286,11 +286,11 @@ struct RemoteView: View {
                                 ProgressView(value: (mgr.eu1progress + mgr.eu2progress)/2)
                                     .progressViewStyle(.circular)
                                     .frame(width: 18, height: 18)
-                                Text("Running...")
+                                Text("运行中…")
                                 Spacer()
                                 Text("\(Int((mgr.eu1progress + mgr.eu2progress)/2 * 100))%")
                             } else {
-                                Text("Enable Spoof EU Region")
+                                Text("启用欧盟区伪装")
                                 Spacer()
                                 if mgr.eu1progress + mgr.eu2progress == 2 {
                                     Image(systemName: "checkmark.circle")
@@ -304,7 +304,7 @@ struct RemoteView: View {
                     }
                     .disabled(mgr.eu1running || mgr.eu2running || mgr.eu1progress+mgr.eu2progress == 2)
                 } footer: {
-                    Text("Enables installing of EU/Japan Marketplace apps.")
+                    Text("允许安装欧盟/日本市场应用")
                 }
                 .disabled(isdebugged() || mgr.rcrunning || !mgr.rcready)
             }
@@ -313,7 +313,7 @@ struct RemoteView: View {
                 Button {
                     youtube_tweak(mgr.ytProc)
                 } label: {
-                    Text("Generic Youtube Tweaks")
+                    Text("通用 YouTube 调整")
                 }
             }
             
@@ -321,10 +321,10 @@ struct RemoteView: View {
                 Button {
                     _ = mgr.rccall(name: "exit", args: [0], timeout: 100)
                 } label: {
-                    Text("Respring")
+                    Text("注销（Respring）")
                 }
             } header: {
-                Text("Tools")
+                Text("工具")
             }
             
             Section {
@@ -348,7 +348,7 @@ struct RemoteView: View {
 
                 Stepper(value: $customTimeoutMs, in: 10...5000, step: 10) {
                     HStack {
-                        Text("Timeout")
+                        Text("超时")
                         Spacer()
                         Text("\(customTimeoutMs) ms")
                             .foregroundColor(.secondary)
@@ -407,7 +407,7 @@ struct RemoteView: View {
                         self.customLastResult = msg
                     }
                 } label: {
-                    Text("Call")
+                    Text("调用")
                 }
 
                 if !customLastResult.isEmpty {
@@ -417,7 +417,7 @@ struct RemoteView: View {
                         .textSelection(.enabled)
                 }
             } header: {
-                Text("Custom RemoteCall")
+                Text("自定义远程调用")
             } footer: {
                 Text("Calls a symbol (via dlsym) or an absolute address. Numeric args are passed as x0-x7 then stack.")
             }
@@ -439,7 +439,7 @@ struct RemoteView: View {
                         Text("Duy Tran")
                             .font(.headline)
                         
-                        Text("Responsible for most things related to remotecall.")
+                        Text("负责远程调用的绝大部分功能。")
                             .font(.subheadline)
                             .foregroundColor(Color.secondary)
                     }
@@ -468,7 +468,7 @@ struct RemoteView: View {
                         Text("0xjf")
                             .font(.headline)
                         
-                        Text("Powercuff and SBCustomizer")
+                        Text("功耗限制与状态栏定制")
                             .font(.subheadline)
                             .foregroundColor(Color.secondary)
                     }
@@ -494,10 +494,10 @@ struct RemoteView: View {
                     .clipShape(Circle())
                     
                     VStack(alignment: .leading) {
-                        Text("Scream")
+                        Text("尖叫")
                             .font(.headline)
                         
-                        Text("Fixed Hide Icon Labels")
+                        Text("固定隐藏图标标签")
                             .font(.subheadline)
                             .foregroundColor(Color.secondary)
                     }
@@ -511,10 +511,10 @@ struct RemoteView: View {
                     }
                 }
             } header: {
-                Text("Credits")
+                Text("致谢")
             }
         }
-        .navigationTitle(Text("Tweaks"))
+        .navigationTitle(Text("功能调整"))
         .onDisappear {
             if freakyrunning, let proc = mgr.sbProc {
                 stopfreakydog(proc)

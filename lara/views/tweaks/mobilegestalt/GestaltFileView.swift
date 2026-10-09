@@ -16,15 +16,15 @@ struct GestaltFileView: View {
         NavigationStack {
             List {
                 Section(header: HeaderLabel(text: "Files", icon: "loupe"), footer: Text("Modifying MobileGestalt is INCREDIBLY DANGEROUS and may lead to your device getting bricked. Do NOT touch anything in here unless you are absoluetely sure you know what you are doing!")) {
-                    Button("Export Original MobileGestalt", action: {
+                    Button("导出原始设备信息", action: {
                         mgSavedExport()
                     })
                     
-                    Button("Export MobileGestalt from Filesystem", action: {
+                    Button("从文件系统导出设备信息", action: {
                         mgFSExport()
                     })
                     
-                    Button("Export Current MobileGestalt", action: {
+                    Button("导出当前设备信息", action: {
                         mgCurrentExport()
                     })
                 }
@@ -35,13 +35,13 @@ struct GestaltFileView: View {
                     }
                 }
             }
-            .navigationTitle("Gestalt File")
+            .navigationTitle("Gestalt 文件")
             .onAppear {
                 do {
                     mgCurrentDict = try NSMutableDictionary(contentsOf: URL(fileURLWithPath: mgCurrentPath), error: ())
                     mgCacheExtra = mgCurrentDict["CacheExtra"] as? [String : Any] ?? [:]
                 } catch {
-                    Alertinator.shared.alert(title: "Failed to load MobileGestalt!", body: "\(error)")
+                    Alertinator.shared.alert(title: "加载设备信息失败！", body: "\(error)")
                 }
             }
             .toolbar {
@@ -58,7 +58,7 @@ struct GestaltFileView: View {
     
     func mgSavedExport() {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
-        let fileURL = documentsURL!.appendingPathComponent("SavedGestalt.plist")
+        let fileURL = documentsURL!.appendingPathComponent("已保存Gestalt.plist")
         presentShareSheet(with: fileURL)
     }
     
@@ -73,7 +73,7 @@ struct GestaltFileView: View {
             try FileManager.default.copyItem(at: URL(fileURLWithPath: mgCurrentPath), to: tempURL)
             presentShareSheet(with: tempURL)
         } catch {
-            Alertinator.shared.alert(title: "Failed to export MobileGestalt!", body: "\(error)")
+            Alertinator.shared.alert(title: "导出设备信息失败！", body: "\(error)")
         }
     }
     
@@ -89,7 +89,7 @@ struct GestaltFileView: View {
             try mgCurrentData.write(to: tempURL)
             presentShareSheet(with: tempURL)
         } catch {
-            Alertinator.shared.alert(title: "Failed to export MobileGestalt!", body: "\(error)")
+            Alertinator.shared.alert(title: "导出设备信息失败！", body: "\(error)")
         }
     }
 }
@@ -102,13 +102,13 @@ struct GestaltKeyRow: View {
     @State private var showNestedDict: Bool = false
     
     var body: some View {
-        if type == "Dictionary" {
+        if type == "字典" {
             LabeledContent(content: {
                 Button(action: {
                     showNestedDict.toggle()
                 }) {
                     HStack {
-                        Text("Dictionary")
+                        Text("字典")
                         Image(systemName: "chevron.down")
                             .frame(width: 24, height: 24, alignment: .center)
                             .rotationEffect(.degrees(showNestedDict ? 0 : -90))
@@ -147,7 +147,7 @@ struct GestaltKeyRow: View {
         case is Bool: return "Bool"
         case is Int: return "Int"
         case is Data: return "Data"
-        case is [String : Any]: return "Dictionary"
+        case is [String : Any]: return "字典"
         default: return "Unknown"
         }
     }

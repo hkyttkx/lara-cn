@@ -18,21 +18,21 @@ public class Alertinator {
         Task { @MainActor in
             alertController = UIAlertController(title: title, message: body, preferredStyle: .alert)
             if showCancel {
-                alertController?.addAction(.init(title: "OK", style: .cancel))
+                alertController?.addAction(.init(title: "确定", style: .cancel))
             }
             alertController?.view.tintColor = UIColor(named: "AccentColor")
             self.present(alertController!)
         }
     }
     
-    public func alert(title: String, body: String, showCancel: Bool = true, actionLabel: String = "OK", action: @escaping () -> Void) {
+    public func alert(title: String, body: String, showCancel: Bool = true, actionLabel: String = "确定", action: @escaping () -> Void) {
         Task { @MainActor in
             alertController = UIAlertController(title: title, message: body, preferredStyle: .alert)
             alertController?.addAction(.init(title: actionLabel, style: .default) { _ in
                 action()
             })
             if showCancel {
-                alertController?.addAction(.init(title: "Cancel", style: .cancel))
+                alertController?.addAction(.init(title: "取消", style: .cancel))
             }
             alertController?.view.tintColor = UIColor(named: "AccentColor")
             self.present(alertController!)
@@ -46,13 +46,13 @@ public class Alertinator {
                 field.placeholder = placeholder
             }
             if showCancel {
-                alertController?.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
+                alertController?.addAction(UIAlertAction(title: "取消", style: .cancel) { _ in
                     Task {
                         await completion(nil)
                     }
                 })
             }
-            alertController?.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+            alertController?.addAction(UIAlertAction(title: "确定", style: .default) { _ in
                 let field = self.alertController?.textFields?.first
                 Task {
                     await completion(field?.text)

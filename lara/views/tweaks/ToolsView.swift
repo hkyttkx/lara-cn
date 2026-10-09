@@ -45,16 +45,16 @@ struct ToolsView: View {
         List {
             if !mgr.dsready {
                 Section {
-                    Text("Kernel R/W is not ready. Run the exploit first.")
+                    Text("内核读写未就绪。请先运行漏洞利用。")
                         .foregroundColor(.secondary)
                 } header: {
-                    Text("Status")
+                    Text("状态")
                 }
             }
 
             Section {
                 HStack {
-                    Text("ASLR:")
+                    Text("ASLR：")
                     
                     Spacer()
                     
@@ -73,21 +73,21 @@ struct ToolsView: View {
                     toggleaslr()
                     isaslr = aslrstate
                 } label: {
-                    Text("Toggle ASLR")
+                    Text("切换 ASLR")
                 }
             } header: {
                 Text("ASLR")
             } footer: {
-                Text("Address Space Layout Randomization. Probably not useful for you.")
+                Text("地址空间布局随机化。对你大概没什么用。")
             }
             
             Section {
-                Button("Respring") {
+                Button("注销（Respring）") {
                     mgr.respring()
                 }
                 
                 HStack {
-                    Text("ourproc: ")
+                    Text("本进程：")
                     Spacer()
                     Text(mgr.dsready ? String(format: "0x%llx", ds_get_our_proc()) : "N/A")
                         .foregroundColor(.secondary)
@@ -95,7 +95,7 @@ struct ToolsView: View {
                 }
                 
                 HStack {
-                    Text("ourtask: ")
+                    Text("本任务：")
                     Spacer()
                     Text(mgr.dsready ? String(format: "0x%llx", ds_get_our_task()) : "N/A")
                         .foregroundColor(.secondary)
@@ -103,7 +103,7 @@ struct ToolsView: View {
                 }
                 
                 HStack {
-                    Text("UID:")
+                    Text("UID：")
 
                     Spacer()
 
@@ -120,7 +120,7 @@ struct ToolsView: View {
                 }
 
                 HStack {
-                    Text("PID:")
+                    Text("PID：")
                     Spacer()
 
                     Text("\(pid)")
@@ -135,12 +135,12 @@ struct ToolsView: View {
                     }
                 }
             } header: {
-                Text("Process")
+                Text("进程")
             }
 
             Section {
                 HStack {
-                    Text("Process: ")
+                    Text("进程：")
                     Spacer()
                     TextField("e.g. SpringBoard", text: $crashname)
                         .textInputAutocapitalization(.never)
@@ -150,16 +150,16 @@ struct ToolsView: View {
                         .fixedSize(horizontal: true, vertical: false)
                 }
 
-                Button("Crash") {
+                Button("崩溃") {
                     crashname.withCString { cstr in
                         _ = crashproc(cstr)
                     }
                 }
                 .disabled(crashname.isEmpty)
             } header: {
-                Text("Crasher")
+                Text("崩溃器")
             } footer: {
-                Text("Crashes the selected process")
+                Text("使选中的进程崩溃")
             }
 
             Section {
@@ -167,22 +167,22 @@ struct ToolsView: View {
                     if mgr.PPHelper() {
                         status = "Succeeded. Open the Pocket Poster app, open settings and tap Detect."
                     } else {
-                        status = "Failed. Check logs."
+                        status = "失败. Check logs."
                     }
                 } label: {
-                    Text("Pocket Poster Helper")
+                    Text("壁纸合成器助手")
                 }
                 .disabled(!mgr.sbxready)
             } header: {
-                Text("Pocket Poster")
+                Text("壁纸合成器")
             } footer: {
-                Text("Get the needed hashes for Pocket Poster without the need of a PC.")
+                Text("无需电脑即可获取壁纸合成器所需的哈希")
             }
             
             Section {
                 HStack {
                     if showtoken {
-                        Text(mgr.sbxready ? "tkn" : "No Saved Token.")
+                        Text(mgr.sbxready ? "tkn" : "没有已保存的令牌")
                             .foregroundColor(.secondary)
                             .monospaced()
                     } else {
@@ -193,7 +193,7 @@ struct ToolsView: View {
                                 .lineLimit(1)
                                 .truncationMode(.middle)
                         } else {
-                            Text("No Saved Token.")
+                            Text("没有已保存的令牌")
                                 .foregroundColor(.secondary)
                         }
                     }
@@ -212,13 +212,13 @@ struct ToolsView: View {
                         Button {
                             UIPasteboard.general.string = token
                         } label: {
-                            Label("Copy", systemImage: "doc.on.doc")
+                            Label("复制", systemImage: "doc.on.doc")
                         }
                     }
                 }
 
                 HStack {
-                    Text("Class:")
+                    Text("类名：")
                     Spacer()
 
                     Picker(" ", selection: $issueclass) {
@@ -230,7 +230,7 @@ struct ToolsView: View {
                 }
 
                 HStack {
-                    Text("Path:")
+                    Text("路径：")
                     Spacer()
                     
                     TextField("/", text: $issuepath)
@@ -246,16 +246,16 @@ struct ToolsView: View {
                 Button {
                     token = mgr.sbxissuetoken(extClass: issueclass.rawValue, path: issuepath) ?? ""
                 } label: {
-                    Text("Issue Token")
+                    Text("签发令牌")
                 }
                 .disabled(!mgr.sbxready)
             } header: {
-                Text("Sandbox")
+                Text("沙盒")
             }
         }
-        .navigationTitle("Tools")
-        .alert("Status", isPresented: .constant(status != nil)) {
-                Button("OK") { status = nil }
+        .navigationTitle("工具")
+        .alert("状态", isPresented: .constant(status != nil)) {
+                Button("确定") { status = nil }
             } message: {
                 Text(status ?? "")
             }

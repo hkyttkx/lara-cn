@@ -88,7 +88,7 @@ struct CardView: View {
                 }
 
                 Picker("Replace", selection: $selected) {
-                    Text("Select... ").tag(replaceoption?.none)
+                    Text("选择…").tag(replaceoption?.none)
                     ForEach(replaceoption.allCases) { option in
                         Text(option.rawValue).tag(Optional(option))
                     }
@@ -100,12 +100,12 @@ struct CardView: View {
                     selected = nil
                 }
 
-                Button("Restore") {
+                Button("还原") {
                     onrestore(card)
                 }
                 .foregroundColor(.red)
 
-                Button("Edit Card Number") {
+                Button("编辑卡牌编号") {
                     oneditnum(card)
                 }
             }
@@ -121,22 +121,22 @@ struct CardView: View {
                     if working {
                         HStack {
                             ProgressView()
-                            Text("Scanning...")
+                            Text("扫描中…")
                         }
                     } else {
-                        Text("Refresh")
+                        Text("刷新")
                     }
                 }
                 .disabled(working)
             } header: {
-                Text("Actions")
+                Text("操作")
             } footer: {
                 Text("Uses SBX first and falls back to VFS for overwrite.\nGet card images [here](https://dynalist.io/d/ldKY6rbMR3LPnWz4fTvf_HCh).")
             }
 
             if cards.isEmpty {
                 Section {
-                    Text("No cards found.")
+                    Text("未找到卡牌")
                         .foregroundColor(.secondary)
                 }
             } else {
@@ -182,7 +182,7 @@ struct CardView: View {
                             Text("drkm9743")
                                 .font(.headline)
 
-                            Text("Inspiration.")
+                            Text("灵感来源")
                                 .font(.subheadline)
                                 .foregroundColor(Color.secondary)
                         }
@@ -196,12 +196,12 @@ struct CardView: View {
                         }
                     }
                 } header: {
-                    Text("Credits")
+                    Text("致谢")
                 }
             }
         }
-        .navigationTitle("Card Overwrite")
-        .alert("Status", isPresented: Binding(
+        .navigationTitle("卡牌覆盖")
+        .alert("状态", isPresented: Binding(
             get: { status != nil },
             set: { presented in
                 if !presented {
@@ -211,34 +211,34 @@ struct CardView: View {
             }
         )) {
             if promptforrespring {
-                Button("Respring") {
+                Button("注销（Respring）") {
                     status = nil
                     promptforrespring = false
                     mgr.respring()
                 }
-                Button("Later", role: .cancel) {
+                Button("稍后", role: .cancel) {
                     status = nil
                     promptforrespring = false
                 }
             } else {
-                Button("OK") { status = nil }
+                Button("确定") { status = nil }
             }
         } message: {
             Text(status ?? "")
         }
-        .alert("Edit Card Number", isPresented: $shownumbereditor) {
+        .alert("编辑卡牌编号", isPresented: $shownumbereditor) {
             TextField("Suffix", text: $cardnuminput)
-            Button("Save") {
+            Button("保存") {
                 if let card = pendingnumcard {
                     applycardnum(card: card, newsuffix: cardnuminput)
                 }
             }
             if let card = pendingnumcard, haspassjsonbackup(card: card) {
-                Button("Restore Original", role: .destructive) {
+                Button("还原原始", role: .destructive) {
                     restorepassjson(card: card)
                 }
             }
-            Button("Cancel", role: .cancel) {}
+            Button("取消", role: .cancel) {}
         } message: {
             Text(currentcardnum.isEmpty ? "Current suffix: (none)" : "Current suffix: \(currentcardnum)")
         }
@@ -433,7 +433,7 @@ struct CardView: View {
         }
 
         guard let data = payload else {
-            status = "Failed to encode image"
+            status = "失败 to encode image"
             return
         }
 
@@ -443,7 +443,7 @@ struct CardView: View {
             promptforrespring = true
             status = "Card updated. Respring now?"
         } else {
-            status = "Failed to overwrite card"
+            status = "失败 to overwrite card"
         }
     }
 
@@ -463,7 +463,7 @@ struct CardView: View {
             return
         }
         guard let data = readprefersbx(path: backuppath, maxsize: 16 * 1024 * 1024) else {
-            status = "Failed to read backup"
+            status = "失败 to read backup"
             return
         }
         if writeprefersbx(path: card.imgpath, data: data) {
@@ -513,7 +513,7 @@ struct CardView: View {
 
     private func applycardnum(card: carditem, newsuffix: String) {
         guard var json = (readpassjson(for: card)).flatMap({ try? JSONSerialization.jsonObject(with: $0) as? [String: Any] }) else {
-            status = "Failed to read pass.json"
+            status = "失败 to read pass.json"
             return
         }
         backuppassjsonifneeded(card: card)
@@ -524,7 +524,7 @@ struct CardView: View {
             json["primaryAccountSuffix"] = trimmed
         }
         guard let data = try? JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted, .sortedKeys]) else {
-            status = "Failed to encode pass.json"
+            status = "失败 to encode pass.json"
             return
         }
         if writeprefersbx(path: passjsonpath(for: card), data: data) {
@@ -532,7 +532,7 @@ struct CardView: View {
             currentcardnum = trimmed
             status = "Card number updated"
         } else {
-            status = "Failed to update pass.json"
+            status = "失败 to update pass.json"
         }
     }
 
@@ -543,7 +543,7 @@ struct CardView: View {
             return
         }
         guard let data = readprefersbx(path: backup, maxsize: 512 * 1024) else {
-            status = "Failed to read backup"
+            status = "失败 to read backup"
             return
         }
         if writeprefersbx(path: passjsonpath(for: card), data: data) {
@@ -551,7 +551,7 @@ struct CardView: View {
             currentcardnum = readcardnum(for: card) ?? ""
             status = "Restored pass.json"
         } else {
-            status = "Failed to restore pass.json"
+            status = "失败 to restore pass.json"
         }
     }
 

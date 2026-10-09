@@ -54,7 +54,7 @@ struct OffsetManagementView: View {
     var body: some View {
         List {
             Section(
-                header: HeaderLabel(text: "Offsets", icon: "tablecells")
+                header: HeaderLabel(text: "偏移设置", icon: "tablecells")
             ) {
                 ForEach(offsets, id: \.self) { name in
                     HStack {
@@ -76,7 +76,7 @@ struct OffsetManagementView: View {
                 }
             }
         }
-        .navigationTitle("Offsets")
+        .navigationTitle("偏移设置")
         .onAppear(perform: initoffs)
         .onChange(of: focusedoff) { current in
             if lastfocused != nil && lastfocused != current {

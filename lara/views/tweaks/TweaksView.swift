@@ -15,63 +15,63 @@ struct TweaksView: View {
         NavigationStack {
             List {
                 Section(header: HeaderLabel(text: "SpringBoard", icon: "house")) {
-                    NavigationLink("RemoteCall Customizer", destination: RemoteView(mgr: mgr))
+                    NavigationLink("远程调用定制", destination: RemoteView(mgr: mgr))
                         .disabled(!mgr.rcready)
-                    NavigationLink("Liquid Glass", destination: LiquidGlassView())
+                    NavigationLink("液态玻璃", destination: LiquidGlassView())
                         .disabled(!mgr.vfsready)
-                    NavigationLink("SpringBoard Customizer", destination: SpringBoardView(mgr: mgr))
+                    NavigationLink("SpringBoard 定制", destination: SpringBoardView(mgr: mgr))
                         .disabled(!mgr.vfsready)
                 }
                 
                 Section(header: HeaderLabel(text: "Lock Screen", icon: "lock")) {
-                    NavigationLink("Passcode Theme", destination: PasscodeView(mgr: mgr))
+                    NavigationLink("锁屏密码主题", destination: PasscodeView(mgr: mgr))
                         .disabled(!mgr.sbxready)
                 }
                 
                 Section(header: HeaderLabel(text: "Apps", icon: "app")) {
-                    NavigationLink("Card Overwrite", destination: CardView())
+                    NavigationLink("卡牌覆盖", destination: CardView())
                         .disabled(!mgr.vfsready)
-                    NavigationLink("App Decrypt", destination: DecryptView())
+                    NavigationLink("应用解密", destination: DecryptView())
                         .disabled(!mgr.sbxready)
-                    NavigationLink("3 App Bypass", destination: AppsView())
+                    NavigationLink("3 应用限制绕过", destination: AppsView())
                         .disabled(!mgr.sbxready)
-                    NavigationLink("Unblacklist", destination: WhitelistView())
+                    NavigationLink("移出黑名单", destination: WhitelistView())
                         .disabled(!mgr.sbxready)
-                    NavigationLink("JIT Enabler", destination: JitView())
+                    NavigationLink("JIT 启用器", destination: JitView())
                         .disabled(!mgr.sbxready)
                 }
                 
                 Section(header: HeaderLabel(text: "User Interface", icon: "eye")) {
                     NavigationLink("dirtyZero", destination: dirtyZeroView())
                         .disabled(!mgr.vfsready)
-                    NavigationLink("Show Hidden Icons", destination: ShowHiddenIconsView(mgr: mgr))
+                    NavigationLink("显示隐藏图标", destination: ShowHiddenIconsView(mgr: mgr))
                         .disabled(!mgr.sbxready && !mgr.vfsready)
-                    NavigationLink("MobileGestalt", destination: GestaltView(mgr: mgr))
+                    NavigationLink("设备信息（Gestalt）", destination: GestaltView(mgr: mgr))
                         .disabled(!mgr.sbxready)
-                    NavigationLink("Font Overwrite", destination: FontPicker(mgr: mgr))
+                    NavigationLink("字体覆盖", destination: FontPicker(mgr: mgr))
                         .disabled(!mgr.vfsready)
-                    NavigationLink("SystemColor Patcher", destination: SystemColor(mgr: mgr))
+                    NavigationLink("系统配色修补", destination: SystemColor(mgr: mgr))
                         .disabled(!mgr.sbxready || !mgr.vfsready)
                 }
                 
                 Section(header: HeaderLabel(text: "System", icon: "gear")) {
-                    NavigationLink("VarClean", destination: VarCleanView())
+                    NavigationLink("变量清理", destination: VarCleanView())
                         .disabled(!mgr.sbxready)
-                    NavigationLink("Custom Overwrite", destination: CustomView(mgr: mgr))
+                    NavigationLink("自定义覆盖", destination: CustomView(mgr: mgr))
                         .disabled(!mgr.vfsready)
-                    NavigationLink("OTA Updates", destination: OTAView(mgr: mgr))
-                    NavigationLink("Screen Time", destination: ScreenTimeView(mgr: mgr))
+                    NavigationLink("OTA 更新", destination: OTAView(mgr: mgr))
+                    NavigationLink("屏幕使用时间", destination: ScreenTimeView(mgr: mgr))
                 }
                 
                 Section(header: HeaderLabel(text: "Broken", icon: "exclamationmark.triangle.fill")) {
-                    NavigationLink("DarkBoard", destination: DarkBoardView())
+                    NavigationLink("暗色面板", destination: DarkBoardView())
                         .disabled(true)
                 }
                 
-                NavigationLink("Extra Tools", destination: ToolsView())
+                NavigationLink("额外工具", destination: ToolsView())
             }
             .disabled(!mgr.dsready)
-            .navigationTitle("Tweaks")
+            .navigationTitle("功能调整")
             .toolbar {
                 if selectedlogsdisplaymode == .toolbar {
                     Button(action: {

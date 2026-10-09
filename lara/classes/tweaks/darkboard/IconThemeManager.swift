@@ -698,7 +698,7 @@ final class IconThemeManager: ObservableObject {
             .union(.illegalCharacters)
             .union(.controlCharacters)
         let cleaned = name.components(separatedBy: invalidCharacterSet).joined(separator: "_").trimmingCharacters(in: .whitespacesAndNewlines)
-        return cleaned.isEmpty ? "Imported Theme" : cleaned
+        return cleaned.isEmpty ? "已导入 Theme" : cleaned
     }
 
     private func findIconBundlesDirectory(in root: URL) throws -> URL? {
@@ -823,7 +823,7 @@ struct IconThemeFixupView: View {
                 .disabled(manager.isFixingUp)
                 .padding(.bottom)
             }
-            .navigationTitle("Icon Fixup")
+            .navigationTitle("图标修复")
             .navigationBarTitleDisplayMode(.inline)
         }
     }

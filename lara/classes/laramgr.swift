@@ -547,7 +547,7 @@ final class laramgr: ObservableObject {
             }
             var PPbundleID = "com.leemin.Pocket-Poster"
             for (bundleID, info) in appList {
-                if info.executable == "Pocket Poster" {
+                if info.executable == "壁纸合成器" {
                     PPbundleID = bundleID
                     break
                 } else if info.executable == "LiveContainer" {
@@ -568,7 +568,7 @@ final class laramgr: ObservableObject {
                 return false
             }
         } catch {
-            logmsg("Error with Pocket Poster Helper: \(error.localizedDescription)")
+            logmsg("错误 with Pocket Poster Helper: \(error.localizedDescription)")
             return false
         }
     }
@@ -608,7 +608,7 @@ final class laramgr: ObservableObject {
 
             }
         } catch {
-            logmsg("Error getting app list: \(error.localizedDescription)")
+            logmsg("错误 getting app list: \(error.localizedDescription)")
             return nil
         }
         return appList

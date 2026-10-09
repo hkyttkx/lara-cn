@@ -37,22 +37,22 @@ struct WhitelistView: View {
                         if patching {
                             HStack {
                                 ProgressView()
-                                Text("Working...")
+                                Text("处理中…")
                             }
                         } else {
-                            Text("Refresh")
+                            Text("刷新")
                         }
                     }
                     .disabled(!mgr.sbxready || patching)
 
-                    Button("Patch (Empty Plist)") {
+                    Button("补丁（空 plist）") {
                         patchall()
                     }
                     .disabled(!mgr.sbxready || patching)
                 } header: {
-                    Text("Actions")
+                    Text("操作")
                 } footer: {
-                    Text("Overwrites MobileIdentityData blacklist files with an empty plist.")
+                    Text("用空 plist 覆盖 MobileIdentityData 黑名单文件")
                 }
 
                 ForEach(files) { f in
@@ -70,9 +70,9 @@ struct WhitelistView: View {
                     }
                 }
             }
-            .navigationTitle("Whitelist")
-            .alert("Status", isPresented: .constant(status != nil)) {
-                Button("OK") { status = nil }
+            .navigationTitle("白名单")
+            .alert("状态", isPresented: .constant(status != nil)) {
+                Button("确定") { status = nil }
             } message: {
                 Text(status ?? "")
             }
@@ -131,7 +131,7 @@ struct WhitelistView: View {
         if failures.isEmpty {
             status = "Patched all files!"
         } else {
-            status = "Failed to patch: \(failures.joined(separator: ", "))"
+            status = "失败 to patch: \(failures.joined(separator: ", "))"
         }
 
         loadall()

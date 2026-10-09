@@ -37,7 +37,7 @@ class Logger: ObservableObject {
         "outline detected - replacing with a space/null glyph",
         "Gesture:",
         "tcp_output [",
-        "Error Domain=",
+        "错误 Domain=",
         "com.apple.UIKit.dragInitiation",
         "OSLOG",
         "_UISystemGestureGateGestureRecognizer",

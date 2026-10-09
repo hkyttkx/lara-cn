@@ -290,7 +290,7 @@ enum santanderfs {
         }
 
         guard let data = readdata(path: item.path, readsbx: readsbx, max: 2 * 1024 * 1024) else {
-            let err = readsbx ? "Failed to read file.\n\n" + unreadabledetails(path: item.path) : "Failed to read file."
+            let err = readsbx ? "失败 to read file.\n\n" + unreadabledetails(path: item.path) : "失败 to read file."
             return santanderloadedfile(preview: .error(err), text: err, editable: false)
         }
 
