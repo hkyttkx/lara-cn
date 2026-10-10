@@ -71,37 +71,37 @@ struct santanderinfosheet: View {
                 }
                 
                 Section(header: HeaderLabel(text: "File Information", icon: "info.circle")) {
-                    LabeledContent("UTType") {
+                    LabeledContent("统一类型标识 (UTType)") {
                         Text(file.uttype)
                     }
-                    LabeledContent("Creation Date") {
+                    LabeledContent("文件创建时间") {
                         Text(file.created)
                     }
-                    LabeledContent("Last Modified") {
+                    LabeledContent("最后修改时间") {
                         Text(file.modified)
                     }
-                    LabeledContent("Symlink") {
+                    LabeledContent("软链接目标") {
                         Image(systemName: file.isSymlink ? "checkmark" : "xmark")
                     }
                 }
                 
                 Section(header: HeaderLabel(text: "Permissions", icon: "shield")) {
-                    LabeledContent("POSIX Permissions") {
+                    LabeledContent("POSIX 权限位掩码") {
                         Text(file.posixPerms)
                     }
-                    LabeledContent("Owner") {
+                    LabeledContent("所有者 (UID)") {
                         Text(file.owner)
                     }
-                    LabeledContent("Group") {
+                    LabeledContent("用户组 (GID)") {
                         Text(file.group)
                     }
-                    LabeledContent("Readable") {
+                    LabeledContent("允许读取") {
                         Image(systemName: file.readable ? "checkmark" : "xmark")
                     }
-                    LabeledContent("Writable") {
+                    LabeledContent("允许写入") {
                         Image(systemName: file.writable ? "checkmark" : "xmark")
                     }
-                    LabeledContent("Executable") {
+                    LabeledContent("允许执行") {
                         Image(systemName: file.executable ? "checkmark" : "xmark")
                     }
                 }

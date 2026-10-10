@@ -34,20 +34,20 @@ struct LiquidGlassView: View {
                 }
                 
                 Section(header: HeaderLabel(text: "User Interface", icon: "iphone"), footer: Text("Solarium Fallback - This will give all liquid glass elements a gray background.\n\nDisable Liquid Glass - This will actually disable liquid glass, reverting back to the iOS 18 UI, with some major visual bugs (especially in the Control Center).")) {
-                    Toggle("Enable Solarium Fallback", isOn: gpKeyBinding("SolariumForceFallback"))
-                    Toggle("Disable Liquid Glass", isOn: gpKeyBinding("com.apple.SwiftUI.DisableSolarium"))
+                    Toggle("强制使用 Solarium 回退模式", isOn: gpKeyBinding("SolariumForceFallback"))
+                    Toggle("完全禁用 Liquid Glass 视觉渲染", isOn: gpKeyBinding("com.apple.SwiftUI.DisableSolarium"))
                 }
                 
                 Section(header: HeaderLabel(text: "液态玻璃", icon: "square.on.square.intersection.dashed")) {
-                    Toggle("Disable Specular Motion", isOn: gpKeyBinding("SBDisableSpecularEverywhereUsingLSSAssertion"))
-                    Toggle("Disable Outer Refraction", isOn: gpKeyBinding("SolariumDisableOuterRefraction"))
-                    Toggle("Disable Solarium HDR", isOn: gpKeyBinding("SolariumAllowHDR", default: true, enable: false))
+                    Toggle("关闭镜面动态反射粒子", isOn: gpKeyBinding("SBDisableSpecularEverywhereUsingLSSAssertion"))
+                    Toggle("禁用外部毛玻璃折射渲染", isOn: gpKeyBinding("SolariumDisableOuterRefraction"))
+                    Toggle("关闭系统 Solarium HDR 显示", isOn: gpKeyBinding("SolariumAllowHDR", default: true, enable: false))
                 }
                 
                 Section(header: HeaderLabel(text: "Visibility", icon: "loupe")) {
-                    Toggle("Ignore Liquid Glass App Build Check", isOn: gpKeyBinding("com.apple.SwiftUI.IgnoreSolariumLinkedOnCheck"))
-                    Toggle("Disable Liquid Glass on LS Clock", isOn: gpKeyBinding("SBDisallowGlassTime"))
-                    Toggle("Disable Liquid Glass on Dock", isOn: gpKeyBinding("SBDisableGlassDock"))
+                    Toggle("跳过 Liquid Glass 版本号强制校验", isOn: gpKeyBinding("com.apple.SwiftUI.IgnoreSolariumLinkedOnCheck"))
+                    Toggle("关闭锁屏时钟高斯模糊", isOn: gpKeyBinding("SBDisallowGlassTime"))
+                    Toggle("关闭 Dock 栏 Liquid Glass 模糊", isOn: gpKeyBinding("SBDisableGlassDock"))
                 }
             }
             .navigationTitle("液态玻璃")

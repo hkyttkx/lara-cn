@@ -22,7 +22,7 @@ struct dirtyZeroView: View {
                     Button("注销（Respring）", action: {
                         mgr.respring()
                     })
-                    Toggle("Enable Risky Tweaks", isOn: $enableRiskyTweaks)
+                    Toggle("允许启用高风险未测试项目", isOn: $enableRiskyTweaks)
                 }
                 
                 ListedTweaksSection

@@ -401,7 +401,7 @@ private struct OverrideSelectionView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 14))
                         VStack(alignment: .leading) {
                             Text(choice.theme.name)
-                            Text(choice.theme.name == manager.iconOverrides[app.bundleIdentifier] ? "Current override" : "Tap to set")
+                            Text(choice.theme.name == manager.iconOverrides[app.bundleIdentifier] ? "Current override" : "点击以修改设置")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }

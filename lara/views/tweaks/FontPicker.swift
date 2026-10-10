@@ -89,7 +89,7 @@ struct FontPicker: View {
                 }
 	                
                 Section {
-                    Picker("Target Style", selection: $selectedTarget) {
+                    Picker("目标渲染样式", selection: $selectedTarget) {
                         ForEach(styletarget.allCases, id: \.self) { target in
                             Text(target.rawValue).tag(target)
                         }

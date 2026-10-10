@@ -356,7 +356,7 @@ struct RemoteView: View {
                     }
                 }
 
-                Toggle("MIG filter bypass", isOn: $customMigBypass)
+                Toggle("MIG 消息过滤器深度绕过", isOn: $customMigBypass)
 
                 Button {
                     run("Custom RemoteCall \(customProcessName):\(customFunctionName)") {

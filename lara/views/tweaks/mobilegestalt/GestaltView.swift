@@ -65,7 +65,7 @@ struct GestaltView: View {
                 }
                 
                 // artwork tweaks will be added when applying mobilegestalt because there's no "toggleable" bindings.
-                Section(header: HeaderLabel(text: "Device Artwork", icon: "paintbrush.pointed")) {
+                Section(header: HeaderLabel(text: "设备外观", icon: "paintbrush.pointed")) {
                     Picker(selection: $mgSubtype) {
                         Text("原始（\(mgOriginalSubtype))").tag(mgOriginalSubtype)
                         if isDeviceNotBroke() {
@@ -93,7 +93,7 @@ struct GestaltView: View {
                         }
                     }
                     
-                    Toggle("Custom Device Name", isOn: $mgEnableDeviceName)
+                    Toggle("自定义设备名称", isOn: $mgEnableDeviceName)
                     
                     if mgEnableDeviceName {
                         TextField("Device Name", text: $mgDeviceName)
@@ -101,19 +101,19 @@ struct GestaltView: View {
                 }
                 
                 // basic tweak toggles
-                Section(header: HeaderLabel(text: "Software-Oriented Features", icon: "gearshape")) {
+                Section(header: HeaderLabel(text: "系统软件功能", icon: "gearshape")) {
                     PlainToggle(text: "Dynamic Island", icon: "platter.filled.top.iphone", minSupportedVersion: 19.0, isOn: mgKeyBinding(["YlEtTtHlNesRBMal1CqRaA"]))
                     PlainToggle(text: "Always On Display", icon: "sun.max", minSupportedVersion: 18.0, isOn: mgKeyBinding(["j8/Omm6s1lsmTDFsXjsBfA", "2OOJf1VhaM7NxfRok3HbWQ"]))
                     PlainToggle(text: "AOD Vibrancy", icon: "rays", minSupportedVersion: 18.0, isOn: mgKeyBinding(["ykpu7qyhqFweVMKtxNylWA"]))
-                    PlainToggle(text: "Charge Limit", icon: "battery.100.bolt", minSupportedVersion: 17.0, isOn: mgKeyBinding(["37NVydb//GP/GrhuTN+exg"]))
-                    PlainToggle(text: "Boot Chime", icon: "speaker.wave.3", isOn: mgKeyBinding(["QHxt+hGLaBPbQJbXiUJX3w"]))
+                    PlainToggle(text: "80% 充电上限控制 (80% Limit)", icon: "battery.100.bolt", minSupportedVersion: 17.0, isOn: mgKeyBinding(["37NVydb//GP/GrhuTN+exg"]))
+                    PlainToggle(text: "开机提示音 (Boot Chime)", icon: "speaker.wave.3", isOn: mgKeyBinding(["QHxt+hGLaBPbQJbXiUJX3w"]))
                     PlainToggle(text: "Liquid Glass LPM", icon: "app.background.dotted", minSupportedVersion: 19.0, isOn: mgKeyBinding(["SAGvsp6O6kAQ4fEfDJpC4Q"]))
                 }
                 
-                Section(header: HeaderLabel(text: "Hardware-Oriented Features", icon: "iphone")) {
+                Section(header: HeaderLabel(text: "硬件模拟功能", icon: "iphone")) {
                     PlainToggle(text: "Camera Control", icon: "camera.shutter.button", minSupportedVersion: 18.0, isOn: mgKeyBinding(["CwvKxM2cEogD3p+HYgaW0Q", "oOV1jhJbdV3AddkcCg0AEA"]))
-                    PlainToggle(text: "Action Button", icon: "button.vertical.left.press", minSupportedVersion: 17.0, isOn: mgKeyBinding(["cT44WE1EohiwRzhsZ8xEsw"]))
-                    PlainToggle(text: "Crash Detection", icon: "car", isOn: mgKeyBinding(["HCzWusHQwZDea6nNhaKndw"]))
+                    PlainToggle(text: "操作按钮 (Action Button)", icon: "button.vertical.left.press", minSupportedVersion: 17.0, isOn: mgKeyBinding(["cT44WE1EohiwRzhsZ8xEsw"]))
+                    PlainToggle(text: "车祸检测 (Crash Detection)", icon: "car", isOn: mgKeyBinding(["HCzWusHQwZDea6nNhaKndw"]))
                     if UIDevice._hasHomeButton() {
                         PlainToggle(text: "Enable Tap to Wake", icon: "hand.tap", isOn: mgKeyBinding(["yZf3GTRMGTuwSV/lD7Cagw"]))
                     }
@@ -121,9 +121,9 @@ struct GestaltView: View {
                 }
                 
                 // some odd bindings in here that i dislike.
-                Section(header: HeaderLabel(text: "Eligibility", icon: "checklist")) {
-                    PlainToggle(text: "Security Research Device UI", icon: "terminal", minSupportedVersion: 26.0, isOn: mgKeyBinding(["XYlJKKkj2hztRP1NWWnhlw"]))
-                    PlainToggle(text: "Disable Region Restrictions", icon: "globe", isOn: mgRegionRestrictionsBinding())
+                Section(header: HeaderLabel(text: "地区资格与权限限制", icon: "checklist")) {
+                    PlainToggle(text: "安全研究设备 (SRD) 专属界面", icon: "terminal", minSupportedVersion: 26.0, isOn: mgKeyBinding(["XYlJKKkj2hztRP1NWWnhlw"]))
+                    PlainToggle(text: "绕过地区限制 (如欧盟侧载/第三方市场)", icon: "globe", isOn: mgRegionRestrictionsBinding())
                     PlainToggle(text: "Apple Intelligence", icon: "apple.intelligence", minSupportedVersion: 18.1, isOn: mgKeyBinding(["A62OafQ85EJAiiqKn4agtg"]))
                     HStack(spacing: 10) {
                         Picker("Spoofing", selection: $mgProductType) {
@@ -163,13 +163,13 @@ struct GestaltView: View {
                     }
                 }
                 
-                Section(header: HeaderLabel(text: "iPadOS Features", icon: "ipad")) {
+                Section(header: HeaderLabel(text: "iPadOS 专属功能", icon: "ipad")) {
                     let cacheExtra = mgCurrentDict["CacheExtra"] as? NSMutableDictionary
                     
-                    PlainToggle(text: "Allow Installing iPadOS Apps", icon: "plus.app", isOn: mgKeyBinding(["9MZ5AdH43csAUajl/dU+IQ"], type: [Int].self, defaultValue: [1], enableValue: [1, 2]))
+                    PlainToggle(text: "强制安装并运行 iPadOS 应用", icon: "plus.app", isOn: mgKeyBinding(["9MZ5AdH43csAUajl/dU+IQ"], type: [Int].self, defaultValue: [1], enableValue: [1, 2]))
                     PlainToggle(text: "Apple Pencil Settings", icon: "pencil", isOn: mgKeyBinding(["yhHcB0iH0d1XzPO/CFd3ow"]))
                     if UIDevice.current.userInterfaceIdiom == .pad {
-                        PlainToggle(text: "Stage Manager", icon: "squares.leading.rectangle", isOn: mgKeyBinding(["qeaj75wk3HF4DwQ8qbIi7g"]))
+                        PlainToggle(text: "台前调度 (Stage Manager)", icon: "squares.leading.rectangle", isOn: mgKeyBinding(["qeaj75wk3HF4DwQ8qbIi7g"]))
                     }
                     PlainToggle(text: "iPadOS UI", icon: "ipad", infoType: .warning, infoMessage: "This is a very dangerous tweak to use! If you use an alphanumeric passcode, DO NOT USE THIS TWEAK AT ALL! Please do not turn off \"Show Dock In Stage Manager\" or your device will BOOTLOOP when rotating to landscape! With these two things in mind, you may experience general instability, or other major issues such as app data randomly disappearing. But I guess some funny multitasking features that still make the device relatively unusable are cool? Whatever dude, I'm not here to tell you how to use your own device.", isOn: mgTrollPadBinding())
                         .disabled(cacheExtra?["+3Uf0Pm5F8Xy7Onyvko0vA"] as? String != "iPhone")
@@ -236,7 +236,7 @@ struct GestaltView: View {
                         )
                     )
                 } header: {
-                    HeaderLabel(text: "UI Tweaks", icon: "eye")
+                    HeaderLabel(text: "界面调整特性", icon: "eye")
                 }
                 
                 Section {
@@ -259,7 +259,7 @@ struct GestaltView: View {
                     )
 
                     PlainToggle(
-                        text: "Show Dynamic Island in Screenshots",
+                        text: "截图时保留灵动岛",
                         icon: "camera",
                         isOn: nuggetbinding(
                             "SBAlwaysShowSystemApertureInSnapshots",
@@ -277,7 +277,7 @@ struct GestaltView: View {
                     )
 
                     PlainToggle(
-                        text: "System Paste Notifications",
+                        text: "系统剪贴板读取提示弹窗",
                         icon: "doc.on.clipboard",
                         isOn: nuggetbinding(
                             "AnnounceAllPastes",
@@ -317,7 +317,7 @@ struct GestaltView: View {
                     )
 
                     PlainToggle(
-                        text: "Show Touches",
+                        text: "屏幕触摸轨迹可视化 (Show Touches)",
                         icon: "hand.point.up.left",
                         isOn: nuggetbinding(
                             "BKDigitizerVisualizeTouches",

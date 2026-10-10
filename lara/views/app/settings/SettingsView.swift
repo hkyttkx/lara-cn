@@ -175,7 +175,7 @@ struct SettingsView: View {
                 }
                 
                 Section(header: HeaderLabel(text: "App", icon: "gearshape"), footer: Text("若启用保活，应用被最小化后仍会继续运行。")) {
-                    Toggle("Keep Alive", isOn: $keepAlive)
+                    Toggle("应用后台持久保活 (Keep Alive)", isOn: $keepAlive)
                         .onChange(of: keepAlive) { _ in
                             if keepAlive {
                                 if !kaenabled { toggleka() }
@@ -183,7 +183,7 @@ struct SettingsView: View {
                                 if kaenabled { toggleka() }
                             }
                         }
-                    Toggle("Disable Log Dividers", isOn: $loggerNoBS)
+                    Toggle("日志界面隐藏分割横线", isOn: $loggerNoBS)
                     Picker("Logs Display", selection: $selectedlogdisplaymode) {
                         ForEach(logsdisplaymode.allCases, id: \.self) { mode in
                             Text(mode.rawValue).tag(mode)
@@ -199,13 +199,13 @@ struct SettingsView: View {
                         }
                     }
                     .pickerStyle(.menu)
-                    Toggle("Recursive Search in File Manager", isOn: $fmRecursiveSearch)
-                    Toggle("Show File Manager in Tabs", isOn: $showFMInTabs)
+                    Toggle("文件管理器支持递归深层搜索", isOn: $fmRecursiveSearch)
+                    Toggle("在底部标签栏常驻文件管理器", isOn: $showFMInTabs)
                 }
                 
                 #if !DISABLE_REMOTECALL
                 Section(header: HeaderLabel(text: "RemoteCall", icon: "syringe")) {
-                    Toggle("Stash KRW primitives", isOn: $stashKRW)
+                    Toggle("将内核读写凭证托管至 launchd 守护进程", isOn: $stashKRW)
                         .onChange(of: stashKRW) { enabled in
                             if enabled && isIOS16() {
                                 Alertinator.shared.alert(
@@ -215,7 +215,7 @@ struct SettingsView: View {
                             }
                         }
                     if isIOS16() {
-                        Toggle("Keep SpringBoard RemoteCall alive in background", isOn: $keepSpringBoardRemoteCallAliveIOS16)
+                        Toggle("后台保持 SpringBoard 远程连接保活", isOn: $keepSpringBoardRemoteCallAliveIOS16)
                         Text("警告：远程调用激活时若退出应用，SpringBoard 可能注销")
                             .font(.footnote.weight(.semibold))
                             .foregroundColor(.red)
@@ -251,7 +251,7 @@ struct SettingsView: View {
                         }
                         .disabled(!mgr.dsready || mgr.rcrunning || stashingKRWNow)
                     }
-                    Toggle("Allow >10 dock icons", isOn: $rcDockUnlimited)
+                    Toggle("解除 Dock 栏 10 个图标放置上限", isOn: $rcDockUnlimited)
                 }
                 #endif
             }
