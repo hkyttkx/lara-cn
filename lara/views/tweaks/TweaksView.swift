@@ -14,8 +14,8 @@ struct TweaksView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section(header: HeaderLabel(text: "游戏与辅助增强", icon: "gamecontroller.fill")) {
-                    NavigationLink("游戏辅助与内存引擎", destination: CheatToolboxView())
+                Section(header: HeaderLabel(text: "游戏与高级工具", icon: "gamecontroller.fill")) {
+                    NavigationLink("游戏辅助与破甲云端中心", destination: ToolsView())
                 }
 
                 Section(header: HeaderLabel(text: "SpringBoard", icon: "house")) {
