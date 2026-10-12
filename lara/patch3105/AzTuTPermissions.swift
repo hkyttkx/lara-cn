@@ -4,6 +4,7 @@
 //  这里换成 lara 的 vfs, 所以把 3105 的权限符号做成适配/占位。
 //
 import Foundation
+import SwiftUI
 
 // MARK: - KernelExploit 适配 (接到 lara 的 vfs)
 enum KernelExploit {
