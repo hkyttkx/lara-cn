@@ -10,7 +10,3 @@ struct WallpaperStagedPackage: Identifiable, Hashable {
     var sizeBytes: Int64 = 0
 }
 
-struct WallpaperImportFeedback: Identifiable {
-    let id = UUID()
-    var message: String = ""
-}
