@@ -9,7 +9,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 enum taboptions {
-    case aztut, applying, tweaks, files, logs
+    case aztut, esp, applying, tweaks, files, logs
 }
 
 let g_isunsupported: Bool = isunsupported()
@@ -55,6 +55,12 @@ struct lara: App {
                         Image(systemName: "gamecontroller.fill")
                     }
                     .tag(taboptions.aztut)
+
+                AceESPView()
+                    .tabItem {
+                        Image(systemName: "scope")
+                    }
+                    .tag(taboptions.esp)
 
                 ContentView()
                     .tabItem {
