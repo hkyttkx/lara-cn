@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 struct FileOperationPayload: Equatable {
     let mode: FileTransferMode
