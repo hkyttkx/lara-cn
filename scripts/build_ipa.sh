@@ -13,6 +13,10 @@ xcodebuild \
   -configuration Debug \
   -sdk iphoneos \
   -arch arm64e \
+  SWIFT_VERSION=5.0 \
+  SWIFT_STRICT_CONCURRENCY=minimal \
+  SWIFT_APPROACHABLE_CONCURRENCY=NO \
+  SWIFT_DEFAULT_ACTOR_ISOLATION=nonisolated \
   CODE_SIGNING_ALLOWED=NO \
   CODE_SIGNING_REQUIRED=NO \
   CODE_SIGN_IDENTITY="" \
