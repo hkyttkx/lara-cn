@@ -25,6 +25,9 @@
 #import "ota.h"
 #import "screentime.h"
 
+// AzTuT ESP
+#import "ace/Ace.h"
+
 #import <zlib.h>
 
 long findcachedataoff(const char *mgkey);
