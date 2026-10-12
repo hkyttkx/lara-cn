@@ -1,11 +1,10 @@
 #!/bin/bash
-set -euo pipefail
+set -uo pipefail
 
 rm -rf build/
 mkdir -p build
 
 echo "Build Started!"
-echo
 
 xcodebuild \
   -project lara.xcodeproj \
@@ -18,7 +17,22 @@ xcodebuild \
   CODE_SIGN_IDENTITY="" \
   CODE_SIGN_ENTITLEMENTS="Config/lara.entitlements" \
   archive \
-  -archivePath "$PWD/build/lara.xcarchive" 2>&1 | tail -1500
+  -archivePath "$PWD/build/lara.xcarchive" > "$PWD/build/xcodebuild.log" 2>&1
+STATUS=$?
+
+echo "=== xcodebuild exit code: $STATUS ==="
+
+if [ $STATUS -ne 0 ]; then
+  echo "=== ERROR LINES ==="
+  grep -nE "error:" "$PWD/build/xcodebuild.log" | head -60
+  echo ""
+  echo "=== FAILED COMMANDS ==="
+  grep -A30 "The following build commands failed" "$PWD/build/xcodebuild.log" | head -40
+  echo ""
+  echo "=== TAIL 40 ==="
+  tail -40 "$PWD/build/xcodebuild.log"
+  exit 1
+fi
 
 APP_PATH="$PWD/build/lara.xcarchive/Products/Applications/lara.app"
 if [ ! -d "$APP_PATH" ]; then
