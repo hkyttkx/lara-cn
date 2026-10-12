@@ -47,7 +47,7 @@ func setupLogCapture() {
 }
 
 // MARK: - App Info
-enum AppInfo {
+enum AzSysInfo {
     static var osVersion: String {
         let v = ProcessInfo.processInfo.operatingSystemVersion
         return "\(v.majorVersion).\(v.minorVersion).\(v.patchVersion)"
