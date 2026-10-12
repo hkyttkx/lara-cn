@@ -20,10 +20,13 @@ final class AzTuTModel: ObservableObject {
 struct AzTuTView: View {
     @StateObject private var model = AzTuTModel()
     @StateObject private var store = AzTuTPatchStore.shared
+    @StateObject private var customStore = AzTuTCustomStore.shared
     @State private var importing = false
     @State private var expandedGame: String?
     @State private var picking: (AzTuTGame, AzTuTSlot)?
+    @State private var pickingCustom: (AzTuTCustomGame, AzTuTCustomSlot)?
     @State private var showMaker = false
+    @State private var showCustomAdd = false
 
     var body: some View {
         NavigationStack {
@@ -34,6 +37,7 @@ struct AzTuTView: View {
                     importCard
                     makerCard
                     gamesCard
+                    customCard
                     logCard
                 }
                 .padding(16)
@@ -53,7 +57,32 @@ struct AzTuTView: View {
         .sheet(isPresented: $showMaker) {
             AzTuTMakerView(model: model)
         }
-        .fileImporter(isPresented: $importing, allowedContentTypes: [.data],
+        .sheet(isPresented: $showCustomAdd) {
+            AzTuTCustomAddView(store: customStore)
+        }
+        .fileImporter(isPresented: Binding(get: { pickingCustom != nil },
+                                            set: { if !$0 { pickingCustom = nil } }),
+                      allowedContentTypes: [.item], allowsMultipleSelection: false) { result in
+            if case .success(let urls) = result, let u = urls.first, let p = pickingCustom {
+                do {
+                    let data = try Data(contentsOf: u)
+                    guard let container = AzTuTContainerFinder.container(for: p.0.id) else {
+                        model.logs = ["❌ 找不到容器: \(p.0.id)"]; pickingCustom = nil; return
+                    }
+                    let dest = container + "/" + p.1.relativeDir + "/" + u.lastPathComponent
+                    let ok = data.withUnsafeBytes { ptr -> Bool in
+                        guard let b = ptr.baseAddress else { return false }
+                        return vfs_write(dest, b, data.count, 0) >= 0
+                    }
+                    model.logs = [ok ? "✅ 已写入 \(u.lastPathComponent)" : "❌ 写入失败"]
+                    model.info = ok ? "替换成功" : "替换失败"
+                } catch {
+                    model.logs = ["❌ 读取失败: \(error.localizedDescription)"]
+                }
+                pickingCustom = nil
+            }
+        }
+        .fileImporter(isPresented: $importing, allowedContentTypes: [.item],
                       allowsMultipleSelection: false) { result in
             if case .success(let urls) = result, let u = urls.first {
                 model.busy = true
@@ -69,7 +98,7 @@ struct AzTuTView: View {
         }
         .fileImporter(isPresented: Binding(get: { picking != nil },
                                             set: { if !$0 { picking = nil } }),
-                      allowedContentTypes: [.data], allowsMultipleSelection: false) { result in
+                      allowedContentTypes: [.item], allowsMultipleSelection: false) { result in
             if case .success(let urls) = result, let u = urls.first, let p = picking {
                 do {
                     let data = try Data(contentsOf: u)
@@ -253,6 +282,52 @@ struct AzTuTView: View {
         .padding(16).background(cardBG)
     }
 
+    // MARK: 自定义游戏/路径
+    private var customCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Label("自定义", systemImage: "slider.horizontal.3.fill")
+                    .font(.headline).foregroundStyle(.white)
+                Spacer()
+                Button { showCustomAdd = true } label: {
+                    Image(systemName: "plus.circle.fill").foregroundStyle(.orange)
+                }.buttonStyle(.plain)
+            }
+            if customStore.games.isEmpty {
+                Text("添加你自己的游戏 / 路径 / 文件名").font(.caption).foregroundStyle(.secondary)
+            } else {
+                ForEach(customStore.games) { g in
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
+                            Image(systemName: g.symbol).foregroundStyle(.orange).frame(width: 24)
+                            Text(g.name).font(.subheadline).foregroundStyle(.white)
+                            Spacer()
+                            Button(role: .destructive) { customStore.remove(g) } label: {
+                                Image(systemName: "trash").font(.caption)
+                            }.buttonStyle(.plain)
+                        }
+                        ForEach(g.slots) { slot in
+                            HStack {
+                                VStack(alignment: .leading, spacing: 1) {
+                                    Text(slot.label).font(.caption).foregroundStyle(.white)
+                                    Text("\(slot.relativeDir)/\(slot.filePattern)")
+                                        .font(.caption2).foregroundStyle(.secondary).lineLimit(1)
+                                }
+                                Spacer()
+                                Button("选文件") {
+                                    pickingCustom = (g, slot)
+                                }.font(.caption).buttonStyle(.bordered).tint(.orange)
+                            }
+                        }
+                    }
+                    .padding(12)
+                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.white.opacity(0.04)))
+                }
+            }
+        }
+        .padding(16).background(cardBG)
+    }
+
     private var cardBG: some View {
         RoundedRectangle(cornerRadius: 16)
             .fill(Color.white.opacity(0.05))
@@ -302,7 +377,7 @@ struct AzTuTMakerView: View {
             .toolbar { ToolbarItem(placement: .cancellationAction) {
                 Button("取消") { dismiss() } } }
         }
-        .fileImporter(isPresented: $pickingFile, allowedContentTypes: [.data],
+        .fileImporter(isPresented: $pickingFile, allowedContentTypes: [.item],
                       allowsMultipleSelection: false) { r in
             if case .success(let u) = r { sourceURL = u.first }
         }
@@ -334,5 +409,48 @@ struct AzTuTMakerView: View {
         } catch {
             model.logs = ["❌ 读取文件失败: \(error.localizedDescription)"]
         }
+    }
+}
+
+// MARK: - 添加自定义游戏
+struct AzTuTCustomAddView: View {
+    @ObservedObject var store: AzTuTCustomStore
+    @Environment(\.dismiss) var dismiss
+
+    @State private var bundleID = ""
+    @State private var name = ""
+    @State private var relDir = "Documents/Pandora/program"
+    @State private var pattern = "*.bytes"
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("游戏/应用") {
+                    TextField("Bundle ID (如 com.tencent.smoba)", text: $bundleID)
+                        .autocorrectionDisabled().textInputAutocapitalization(.never)
+                    TextField("显示名称", text: $name)
+                }
+                Section("目标位置") {
+                    TextField("容器内相对路径", text: $relDir)
+                        .autocorrectionDisabled().textInputAutocapitalization(.never)
+                    TextField("文件名或通配 (如 *.pak)", text: $pattern)
+                        .autocorrectionDisabled().textInputAutocapitalization(.never)
+                }
+                Section {
+                    Button("保存") { save() }
+                        .disabled(bundleID.isEmpty || name.isEmpty)
+                }
+            }
+            .navigationTitle("添加自定义")
+            .toolbar { ToolbarItem(placement: .cancellationAction) {
+                Button("取消") { dismiss() } } }
+        }
+    }
+
+    private func save() {
+        let slot = AzTuTCustomSlot(label: "自定义路径", relativeDir: relDir, filePattern: pattern)
+        let g = AzTuTCustomGame(id: bundleID, name: name, symbol: "star.fill", slots: [slot])
+        store.add(g)
+        dismiss()
     }
 }
