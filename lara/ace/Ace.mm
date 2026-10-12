@@ -49,7 +49,7 @@
 
 #define AC_RTLD_DEFAULT         ((uint64_t)-2)
 
-#pragma mark - 内嵌 overlay 页面（横屏，尺寸由宿主注入）
+#pragma mark - 内嵌 overlay 页面（横屏 Canvas）
 
 static const char *kAceHTML = R"ACEHTML(<!DOCTYPE html>
 <html>
@@ -86,19 +86,16 @@ function draw() {
     var w = e.w, h = e.h;
     if (w <= 0 || h <= 0) continue;
 
-    var col = e.tm ? '#4ade80' : '#ff4d4d';
-    ctx.strokeStyle = col;
+    ctx.strokeStyle = e.tm ? '#4ade80' : '#ff4d4d';
     ctx.lineWidth = 1.5;
     ctx.strokeRect(e.x, e.y, w, h);
 
-    // 血条
     var pct = e.mx > 0 ? Math.max(0, Math.min(1, e.hp / e.mx)) : 0;
     ctx.fillStyle = 'rgba(0,0,0,0.65)';
     ctx.fillRect(e.x, e.y - 8, w, 4);
     ctx.fillStyle = pct > 0.5 ? '#4ade80' : (pct > 0.25 ? '#facc15' : '#ef4444');
     ctx.fillRect(e.x, e.y - 8, w * pct, 4);
 
-    // 名字 + 距离
     var label = e.n + '  ' + e.d + 'm';
     ctx.font = '12px -apple-system,Helvetica';
     ctx.textAlign = 'center';
@@ -121,7 +118,6 @@ window.aceClear  = function () { items = []; };
 #pragma mark - 跨进程 ObjC 封装
 
 @interface AceRemote : NSObject
-@property (nonatomic, readonly) RemoteCall *rc;
 - (BOOL)attach:(NSString *)processName;
 - (uint64_t)callRaw:(uint64_t)fn args:(uint64_t *)args count:(NSUInteger)count;
 - (uint64_t)allocString:(const char *)s;
@@ -131,8 +127,7 @@ window.aceClear  = function () { items = []; };
 - (uint64_t)msg:(uint64_t)obj sel:(const char *)name a0:(uint64_t)a0;
 - (uint64_t)msg:(uint64_t)obj sel:(const char *)name a0:(uint64_t)a0 a1:(uint64_t)a1;
 - (uint64_t)msg:(uint64_t)obj sel:(const char *)name rect:(CGRect)rect;
-- (uint64_t)string:(const char *)s;
+- (uint64_t)str:(const char *)s;
 - (uint64_t)scratch;
-- (void)deallocAll;
+@property (nonatomic, readonly) RemoteCall *rc;
 @end
-)ACEHTML_PLACEHOLDER
