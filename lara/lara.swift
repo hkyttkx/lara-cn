@@ -19,6 +19,8 @@ var weonadebugbuild_pjbweouttahereexclamationmark: Bool = false
 struct lara: App {
     @StateObject private var mgr = laramgr.shared
     @StateObject private var iconthememgr = IconThemeManager.shared
+    @StateObject private var patchStore = PatchProjectStore()
+    @StateObject private var patchDraft = PatchDraftCoordinator()
     @Environment(\.scenePhase) var scenephase
     @AppStorage("selectedMethod") private var selectedMethod: method = .hybrid
     @AppStorage("keepAlive") private var keepalive: Bool = false
@@ -46,7 +48,9 @@ struct lara: App {
     var body: some Scene {
         WindowGroup {
             TabView(selection: $selectedtab) {
-                AzTuTView()
+                PatchProjectsView(onOpenSettings: {}, onOpenLogs: {})
+                    .environmentObject(patchStore)
+                    .environmentObject(patchDraft)
                     .tabItem {
                         Image(systemName: "gamecontroller.fill")
                     }
