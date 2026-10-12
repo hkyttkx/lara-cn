@@ -194,7 +194,7 @@ struct VarCleanView: View {
     }
 }
 
-private func loadvarcleangroups() -> [varcleangroup] {
+nonisolated private func loadvarcleangroups() -> [varcleangroup] {
     var error: NSError?
     guard let rules = VarCleanBridge.loadRulesNamed("VarCleanRules", in: .main, error: &error) as? [String: Any] else {
         return []

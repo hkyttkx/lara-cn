@@ -487,7 +487,7 @@ struct ToolsView: View {
                 var prot: UInt32 = 0
                 let r = az_vm_region(task, &address, &size, &prot)
                 if r != 0 { break }
-                if (info.protection & VM_PROT_EXECUTE) != 0 && address >= 0x100000000 {
+                if (prot & UInt32(VM_PROT_EXECUTE)) != 0 && address >= 0x100000000 {
                     mainModuleBase = UInt64(address)
                     break
                 }
