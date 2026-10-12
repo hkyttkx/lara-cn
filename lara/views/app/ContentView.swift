@@ -32,7 +32,7 @@ struct ContentView: View {
                 DebugSection
                 InlineLogsSection
             }
-            .navigationTitle("Lara")
+            .navigationTitle("AzTuT 引擎")
             .toolbar {
                 if selectedlogsdisplaymode == .toolbar {
                     Button(action: {

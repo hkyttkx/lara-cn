@@ -57,15 +57,9 @@ struct lara: App {
                         Image(systemName: "wrench.and.screwdriver.fill")
                     }
                     .tag(taboptions.applying)
+
                 
-                // this has gotta fucking go
-                TweaksView(mgr: mgr)
-                    .tabItem {
-                        Image(systemName: "ant.fill")
-                    }
-                    .tag(taboptions.tweaks)
-                
-                
+                // lara 的 tweaks 页(字体/壁纸/状态栏等)已按需求移除
                 // i'm gonna strangle you root (the weight of your actions will crush you)
                 if showfmintabs {
                     SantanderView(startPath: "/")
