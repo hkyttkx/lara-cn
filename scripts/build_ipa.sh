@@ -13,16 +13,12 @@ xcodebuild \
   -configuration Debug \
   -sdk iphoneos \
   -arch arm64e \
-  SWIFT_VERSION=5.0 \
-  SWIFT_STRICT_CONCURRENCY=minimal \
-  SWIFT_APPROACHABLE_CONCURRENCY=NO \
-  SWIFT_DEFAULT_ACTOR_ISOLATION=nonisolated \
   CODE_SIGNING_ALLOWED=NO \
   CODE_SIGNING_REQUIRED=NO \
   CODE_SIGN_IDENTITY="" \
   CODE_SIGN_ENTITLEMENTS="Config/lara.entitlements" \
   archive \
-  -archivePath "$PWD/build/lara.xcarchive" 2>&1 | xcpretty
+  -archivePath "$PWD/build/lara.xcarchive" 2>&1 | tail -300
 
 APP_PATH="$PWD/build/lara.xcarchive/Products/Applications/lara.app"
 if [ ! -d "$APP_PATH" ]; then
