@@ -2,6 +2,7 @@
 //  AzTuTView.swift — AzTuT 一键替换主界面 (中文 / 卡片式)
 //
 import SwiftUI
+import Combine
 import UniformTypeIdentifiers
 
 @MainActor
