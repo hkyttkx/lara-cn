@@ -12,6 +12,7 @@
 #import "vnode.h"
 #import "apfs.h"
 #import "vfs.h"
+#import "azmem.h"
 #import "sbx.h"
 #import "IconServices.h"
 #import "rc.h"

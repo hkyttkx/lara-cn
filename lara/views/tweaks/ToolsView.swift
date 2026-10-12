@@ -396,7 +396,7 @@ struct ToolsView: View {
         
         DispatchQueue.global(qos: .userInitiated).async {
             var task: mach_port_t = 0
-            let kr = task_for_pid(mach_task_self(), p.pid, &task)
+            let kr = az_task_for_pid(p.pid, &task)
             guard kr == KERN_SUCCESS, task != 0 else {
                 DispatchQueue.main.async {
                     self.isScanningMemory = false
@@ -404,29 +404,23 @@ struct ToolsView: View {
                 return
             }
 
-            var address: mach_vm_address_t = 0
-            var size: mach_vm_size_t = 0
-            var info = vm_region_basic_info_data_64_t()
-            var count = mach_msg_type_number_t(MemoryLayout<vm_region_basic_info_data_64_t>.size / 4)
-            var objectName: mach_port_t = 0
+            var address: UInt64 = 0
+            var size: UInt64 = 0
             var found: [UInt64] = []
 
             let targetInt = Int32(self.targetValStr) ?? 0
             let targetFloat = Float(self.targetValStr) ?? 0.0
 
             while true {
-                let r = withUnsafeMutablePointer(to: &info) { infoPtr in
-                    infoPtr.withMemoryRebound(to: Int32.self, capacity: Int(count)) { intPtr in
-                        mach_vm_region(task, &address, &size, VM_REGION_BASIC_INFO_64, intPtr, &count, &objectName)
-                    }
-                }
-                if r != KERN_SUCCESS { break }
+                var prot: UInt32 = 0
+                let r = az_vm_region(task, &address, &size, &prot)
+                if r != 0 { break }
 
-                if (info.protection & VM_PROT_READ) != 0 && (info.protection & VM_PROT_WRITE) != 0 && size < 0x20000000 {
-                    var data: vm_offset_t = 0
-                    var dataSize: mach_msg_type_number_t = 0
-                    let readRes = mach_vm_read(task, address, size, &data, &dataSize)
-                    if readRes == KERN_SUCCESS && data != 0 {
+                if (prot & UInt32(VM_PROT_READ)) != 0 && (prot & UInt32(VM_PROT_WRITE)) != 0 && size < 0x20000000 {
+                    var data: UInt64 = 0
+                    var dataSize: UInt32 = 0
+                    let readRes = az_vm_read(task, address, size, &data, &dataSize)
+                    if readRes == 0 && data != 0 {
                         let ptr = UnsafeRawPointer(bitPattern: UInt(data))!
                         let numElements = Int(dataSize) / 4
 
@@ -461,7 +455,7 @@ struct ToolsView: View {
                                 }
                             }
                         }
-                        mach_vm_deallocate(mach_task_self(), data, mach_vm_size_t(dataSize))
+                        az_vm_deallocate(task, data, UInt64(dataSize))
                     }
                 }
                 if found.count >= 25 { break }
@@ -482,23 +476,17 @@ struct ToolsView: View {
 
         DispatchQueue.global(qos: .userInitiated).async {
             var task: mach_port_t = 0
-            let kr = task_for_pid(mach_task_self(), p.pid, &task)
+            let kr = az_task_for_pid(p.pid, &task)
             guard kr == KERN_SUCCESS, task != 0 else { return }
 
             var mainModuleBase: UInt64 = 0x100000000
-            var address: mach_vm_address_t = 0
-            var size: mach_vm_size_t = 0
-            var info = vm_region_basic_info_data_64_t()
-            var count = mach_msg_type_number_t(MemoryLayout<vm_region_basic_info_data_64_t>.size / 4)
-            var objectName: mach_port_t = 0
+            var address: UInt64 = 0
+            var size: UInt64 = 0
 
             while true {
-                let r = withUnsafeMutablePointer(to: &info) { infoPtr in
-                    infoPtr.withMemoryRebound(to: Int32.self, capacity: Int(count)) { intPtr in
-                        mach_vm_region(task, &address, &size, VM_REGION_BASIC_INFO_64, intPtr, &count, &objectName)
-                    }
-                }
-                if r != KERN_SUCCESS { break }
+                var prot: UInt32 = 0
+                let r = az_vm_region(task, &address, &size, &prot)
+                if r != 0 { break }
                 if (info.protection & VM_PROT_EXECUTE) != 0 && address >= 0x100000000 {
                     mainModuleBase = UInt64(address)
                     break
@@ -521,19 +509,19 @@ struct ToolsView: View {
     private func writeMemory(freeze: Bool) {
         guard let p = targetGameProc, !matchedAddrs.isEmpty else { return }
         var task: mach_port_t = 0
-        let kr = task_for_pid(mach_task_self(), p.pid, &task)
+        let kr = az_task_for_pid(p.pid, &task)
         guard kr == KERN_SUCCESS, task != 0 else { return }
 
         for addr in matchedAddrs {
             if searchModeIndex == 1 {
                 guard var val = Float(modifyValStr) else { continue }
                 withUnsafePointer(to: &val) { ptr in
-                    _ = mach_vm_write(task, mach_vm_address_t(addr), vm_offset_t(UInt(bitPattern: ptr)), mach_msg_type_number_t(MemoryLayout<Float>.size))
+                    _ = az_write_mem(task, addr, UnsafeRawPointer(ptr), UInt64(MemoryLayout<Float>.size))
                 }
             } else {
                 guard var val = Int32(modifyValStr) else { continue }
                 withUnsafePointer(to: &val) { ptr in
-                    _ = mach_vm_write(task, mach_vm_address_t(addr), vm_offset_t(UInt(bitPattern: ptr)), mach_msg_type_number_t(MemoryLayout<Int32>.size))
+                    _ = az_write_mem(task, addr, UnsafeRawPointer(ptr), UInt64(MemoryLayout<Int32>.size))
                 }
             }
         }
