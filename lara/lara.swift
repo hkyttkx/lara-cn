@@ -9,7 +9,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 enum taboptions {
-    case applying, tweaks, files, logs
+    case aztut, applying, tweaks, files, logs
 }
 
 let g_isunsupported: Bool = isunsupported()
@@ -24,7 +24,7 @@ struct lara: App {
     @AppStorage("keepAlive") private var keepalive: Bool = false
     @AppStorage("showFMInTabs") private var showfmintabs: Bool = true
     @AppStorage("logsdisplaymode") private var logsdisplaymode: logsdisplaymode = .toolbar
-    @State private var selectedtab: taboptions = .applying
+    @State private var selectedtab: taboptions = .aztut
     
     init() {
         #if DEBUG
@@ -46,6 +46,12 @@ struct lara: App {
     var body: some Scene {
         WindowGroup {
             TabView(selection: $selectedtab) {
+                AzTuTView()
+                    .tabItem {
+                        Image(systemName: "gamecontroller.fill")
+                    }
+                    .tag(taboptions.aztut)
+
                 ContentView()
                     .tabItem {
                         Image(systemName: "wrench.and.screwdriver.fill")
